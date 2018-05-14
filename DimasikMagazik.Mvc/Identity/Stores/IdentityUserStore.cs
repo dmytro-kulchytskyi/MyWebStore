@@ -23,14 +23,14 @@ namespace DimasikMagazik.Mvc.Identity.Stores
             this.userManager = userManager;
         }
 
-        private async Task<IdentityUser> GetIdentityUser(AppUser appUser)
+        private Task<IdentityUser> GetIdentityUser(AppUser appUser)
         {
             var identityUser = Mapper.Map<IdentityUser>(appUser);
 
             if (appUser == null)
                 return null;
-            
-            return identityUser;
+
+            return Task.FromResult(identityUser);
         }
 
         public async Task CreateAsync(IdentityUser user)
@@ -38,7 +38,7 @@ namespace DimasikMagazik.Mvc.Identity.Stores
             var appUser = Mapper.Map<AppUser>(user);
             await userManager.CreateUser(appUser);
             user.Id = appUser.Id;
-            
+
         }
 
         public Task DeleteAsync(IdentityUser user)
@@ -61,10 +61,7 @@ namespace DimasikMagazik.Mvc.Identity.Stores
             return userManager.UpdateUser(Mapper.Map<AppUser>(user));
         }
 
-        public void Dispose()
-        {
 
-        }
 
         public Task SetPasswordHashAsync(IdentityUser user, string passwordHash)
         {
@@ -152,6 +149,10 @@ namespace DimasikMagazik.Mvc.Identity.Stores
         {
             return Task.FromResult(user.Role.Equals(roleName, StringComparison.InvariantCultureIgnoreCase));
         }
-  
+
+        public void Dispose()
+        {
+
+        }
     }
 }

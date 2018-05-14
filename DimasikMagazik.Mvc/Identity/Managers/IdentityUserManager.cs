@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.DataProtection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace DimasikMagazik.Mvc.Identity.Managers
@@ -36,6 +37,18 @@ namespace DimasikMagazik.Mvc.Identity.Managers
             DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
             MaxFailedAccessAttemptsBeforeLockout = 5;
 
+        }
+
+        public override Task<IdentityResult> CreateAsync(IdentityUser user)
+        {
+            user.Role = "User";
+            return base.CreateAsync(user);
+        }
+
+        public override Task<IdentityResult> CreateAsync(IdentityUser user, string password)
+        {
+            user.Role = "User";
+            return base.CreateAsync(user, password);
         }
 
     }

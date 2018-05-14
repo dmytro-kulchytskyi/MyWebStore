@@ -76,13 +76,13 @@
     <Compile Include="Wrappers\TransactionWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\DimasikMagazik.Bussiness\DimasikMagazik.Business.csproj">
       <Project>{3A4D5922-DA3F-465B-9696-1A7E5E2E2303}</Project>
       <Name>DimasikMagazik.Business</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
