@@ -36,13 +36,6 @@ namespace DimasikMagazik.Mvc.Identity.Managers
             UserLockoutEnabledByDefault = false;
             DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
             MaxFailedAccessAttemptsBeforeLockout = 5;
-
-        }
-
-        public override Task<IdentityResult> CreateAsync(IdentityUser user)
-        {
-            user.Role = "User";
-            return base.CreateAsync(user);
         }
 
         public override Task<IdentityResult> CreateAsync(IdentityUser user, string password)
@@ -50,6 +43,5 @@ namespace DimasikMagazik.Mvc.Identity.Managers
             user.Role = "User";
             return base.CreateAsync(user, password);
         }
-
     }
 }
