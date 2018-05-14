@@ -18,6 +18,8 @@ namespace DimasikStore.Business.Entities
 
         public virtual int SellsCount { get; set; }
 
+        public virtual bool Banned { get; set; }
+
         public virtual int Stock { get; set; }
     }
 }

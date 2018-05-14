@@ -18,6 +18,7 @@ namespace DimasikStore.Nhibarnate.Mappings
             Map(x => x.Description).CustomSqlType("ntext").Not.Nullable();
             Map(x => x.Image).Nullable();
             Map(x => x.Price).Not.Nullable();
+            Map(x => x.Banned).Not.Nullable();
             Map(x => x.SellsCount).Not.Nullable();
         }
     }

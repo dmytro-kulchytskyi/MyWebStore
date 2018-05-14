@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DimasikStore.Nhibarnate", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DimasikStore.Business", "DimasikStore.Bussiness\DimasikStore.Business.csproj", "{3A4D5922-DA3F-465B-9696-1A7E5E2E2303}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DimasikStore.Lucene", "DimasikStore.Lucene\DimasikStore.Lucene.csproj", "{F634D3B3-2B6D-46C2-A34D-0096F6325CAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3A4D5922-DA3F-465B-9696-1A7E5E2E2303}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A4D5922-DA3F-465B-9696-1A7E5E2E2303}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A4D5922-DA3F-465B-9696-1A7E5E2E2303}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F634D3B3-2B6D-46C2-A34D-0096F6325CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F634D3B3-2B6D-46C2-A34D-0096F6325CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F634D3B3-2B6D-46C2-A34D-0096F6325CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F634D3B3-2B6D-46C2-A34D-0096F6325CAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

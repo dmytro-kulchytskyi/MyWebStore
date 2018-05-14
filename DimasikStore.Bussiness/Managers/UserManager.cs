@@ -27,6 +27,8 @@ namespace DimasikStore.Business.Managers
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
+            user.Banned = false;
+
             await provider.Save(user);
         }
 
