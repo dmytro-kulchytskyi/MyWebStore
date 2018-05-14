@@ -58,7 +58,7 @@ namespace DimasikStore.Mvc.Identity.Stores
 
         public Task UpdateAsync(IdentityUser user)
         {
-            return userManager.EditUser(Mapper.Map<AppUser>(user));
+            return userManager.UpdateUser(Mapper.Map<AppUser>(user));
         }
 
         public void Dispose()
@@ -152,17 +152,6 @@ namespace DimasikStore.Mvc.Identity.Stores
         {
             return Task.FromResult(user.Role.Equals(roleName, StringComparison.InvariantCultureIgnoreCase));
         }
-
-        public Task SetEmailAsync(IdentityUser user, string email)
-        {
-            user.Email = email;
-            return Task.CompletedTask;
-        }
-
-        public Task<string> GetEmailAsync(IdentityUser user)
-        {
-            return Task.FromResult(user.Email);
-        }
-        
+  
     }
 }

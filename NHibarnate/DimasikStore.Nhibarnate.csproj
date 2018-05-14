@@ -62,9 +62,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
+    <Compile Include="Mappings\ProductMap.cs" />
+    <Compile Include="Mappings\AppUserMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Provider.cs" />
+    <Compile Include="Providers\ProductProvider.cs" />
+    <Compile Include="Providers\Provider.cs" />
+    <Compile Include="ProviderHelper.cs" />
     <Compile Include="UnitOfWork.cs" />
+    <Compile Include="Providers\UserProvider.cs" />
     <Compile Include="Wrappers\Factories\SessionWrapperFactory.cs" />
     <Compile Include="Wrappers\Factories\TransactionWrapperFactory.cs" />
     <Compile Include="Wrappers\SessionWrapper.cs" />

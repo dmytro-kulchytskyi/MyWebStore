@@ -28,7 +28,6 @@ namespace DimasikStore.Business.Managers
                 throw new ArgumentNullException(nameof(user));
 
             await provider.Save(user);
-
         }
 
         public async Task UpdateUser(AppUser user)
@@ -39,7 +38,7 @@ namespace DimasikStore.Business.Managers
             if (string.IsNullOrEmpty(user.Id))
                 throw new ArgumentException(nameof(user) + nameof(user.Id));
 
-            await provider.SaveOrUpdate(user);
+            await provider.Update(user);
         }
     }
 }

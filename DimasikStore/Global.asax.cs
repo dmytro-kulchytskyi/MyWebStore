@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DimasikStore.Mvc.App_Start.Unity;
+using DimasikStore.Mvc.EntityMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,6 +18,10 @@ namespace DimasikStore
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            MvcDependencyResolverConfig.ConfigureDependencyResolver(UnityConfig.Container);
+
+            MapperConfig.Initialize();
         }
     }
 }

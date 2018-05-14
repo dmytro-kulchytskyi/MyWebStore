@@ -16,7 +16,7 @@ namespace DimasikStore.Business.Entities
 
         public virtual double Price { get; set; }
 
-        public virtual int Sells { get; set; }
+        public virtual int SellsCount { get; set; }
 
         public virtual int Stock { get; set; }
     }

@@ -10,7 +10,9 @@ namespace DimasikStore.Business.Entities
 
         public virtual string Email { get; set; }
 
-        public virtual string PasswodHash { get; set; }
+        public virtual string Role { get; set; }
+
+        public virtual string PasswordHash { get; set; }
 
         public virtual bool Banned { get; set; }
    }

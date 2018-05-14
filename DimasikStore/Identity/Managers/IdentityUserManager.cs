@@ -18,7 +18,7 @@ namespace DimasikStore.Mvc.Identity.Managers
             UserValidator = new UserValidator<IdentityUser>(this)
             {
                 AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = true
+                RequireUniqueEmail = false
             };
 
             // Configure validation logic for passwords
@@ -36,15 +36,7 @@ namespace DimasikStore.Mvc.Identity.Managers
             DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
             MaxFailedAccessAttemptsBeforeLockout = 5;
 
-            RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<IdentityUser>
-            {
-                Subject = "Security Code",
-                BodyFormat = "Your security code is {0}"
-            });
-
-            EmailService = new EmailService();
-            SmsService = new SmsService();
         }
-        
+
     }
 }

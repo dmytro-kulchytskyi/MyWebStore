@@ -1,5 +1,6 @@
 ﻿using NHibernate;
 using DimasikStore.Business;
+using DimasikStore.Nhibarnate;
 
 namespace DimasikStore.Nhibernate.Wrappers.Factories
 {
@@ -12,9 +13,8 @@ namespace DimasikStore.Nhibernate.Wrappers.Factories
             this.requestDataStorage = requestDataStorage;
         }
 
-        public SessionWrapper Create()
-        {
-            return new SessionWrapper(requestDataStorage, Configuration.SessionFactory);
-        }
+        public SessionWrapper Create() =>
+            new SessionWrapper(requestDataStorage, Configuration.SessionFactory);
+
     }
 }

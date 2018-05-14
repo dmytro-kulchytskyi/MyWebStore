@@ -11,8 +11,11 @@ namespace DimasikStore.Mvc.Identity
     {
         public IdentityMapperProfile()
         {
-            CreateMap<IdentityUser, AppUser>();
-            CreateMap<AppUser, IdentityUser>();
+            CreateMap<IdentityUser, AppUser>()
+                .ForMember(x => x.Email, m => m.MapFrom(a => a.UserName));
+
+            CreateMap<AppUser, IdentityUser>()
+                 .ForMember(x => x.UserName, m => m.MapFrom(a => a.Email));
         }
     }
 }
