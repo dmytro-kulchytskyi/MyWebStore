@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DimasikStore.Business;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
@@ -6,7 +7,7 @@ using System.Web;
 
 namespace DimasikStore.Mvc
 {
-    public class RequestDataStorage
+    public class RequestDataStorage : IRequestDataStorage
     {
         private Dictionary<string, object> dictionary;
 
@@ -24,16 +25,14 @@ namespace DimasikStore.Mvc
         }
 
         public T GetValue<T>(string key)
-            where T : class
         {
             if (dictionary.ContainsKey(key))
                 return (T)dictionary[key];
 
-            return null;
+            return default(T);
         }
 
         public void SetValue<T>(string key, T value)
-            where T : class
         {
             if (dictionary.ContainsKey(key))
                 dictionary[key] = value;

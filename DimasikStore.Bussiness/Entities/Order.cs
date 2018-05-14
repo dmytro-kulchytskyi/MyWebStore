@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DimasilStore.Business.Entities
+namespace DimasikStore.Business.Entities
 {
     public class Order : IEntity
     {
