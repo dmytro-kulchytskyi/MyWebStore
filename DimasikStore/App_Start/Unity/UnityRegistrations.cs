@@ -1,5 +1,8 @@
 ﻿using DimasikStore.Business;
+using DimasikStore.Business.Entities;
 using DimasikStore.Business.Providers;
+using DimasikStore.Business.Search;
+using DimasikStore.Lucene;
 using DimasikStore.Mvc.Identity;
 using DimasikStore.Nhibarnate;
 using Microsoft.Owin.Security;
@@ -25,6 +28,8 @@ namespace DimasikStore.Mvc.App_Start.Unity
 
             c.RegisterType<IUserProvider, Nhibarnate.Providers.UserProvider>();
             c.RegisterType<IProductProvider, Nhibarnate.Providers.ProductProvider>();
+
+            c.RegisterType<ISearchProvider<Product>, ProductSearchProvider>();
         }
     }
 }
