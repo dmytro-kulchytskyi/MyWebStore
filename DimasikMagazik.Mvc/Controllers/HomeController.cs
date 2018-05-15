@@ -1,16 +1,32 @@
-﻿using System;
+﻿using AutoMapper;
+using DimasikMagazik.Business.Managers;
+using DimasikMagazik.Mvc.Models.ProductViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace DimasikMagazik.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        private readonly ProductManager productManager;
+
+        public HomeController(ProductManager productManager)
         {
-            return View();
+            this.productManager = productManager;
+        }
+
+        public async Task<ActionResult> Index()
+        {
+            var topProducts = await productManager.GetTopBySellingCount(int.Parse(WebConfigurationManager.AppSettings["TopProductsCount"]));
+
+            var model = Mapper.Map<IEnumerable<ProductListItemViewModel>>(topProducts);
+
+            return View(model);
         }
 
         public ActionResult About()

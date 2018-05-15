@@ -20,6 +20,7 @@ namespace DimasikMagazik.Nhibarnate.Mappings
             Map(x => x.Price).Not.Nullable();
             Map(x => x.Banned).Not.Nullable();
             Map(x => x.SellsCount).Not.Nullable();
+            Map(x => x.Added).Not.Nullable();
         }
     }
 }

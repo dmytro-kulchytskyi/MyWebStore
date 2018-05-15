@@ -26,10 +26,7 @@ namespace DimasikMagazik.Mvc
 
         public T GetValue<T>(string key)
         {
-            if (dictionary.ContainsKey(key))
-                return (T)dictionary[key];
-
-            return default(T);
+            return dictionary.ContainsKey(key) ? (T)dictionary[key] : default(T);
         }
 
         public void SetValue<T>(string key, T value)

@@ -21,5 +21,7 @@ namespace DimasikMagazik.Business.Entities
         public virtual bool Banned { get; set; }
 
         public virtual int Stock { get; set; }
+
+        public virtual DateTime Added { get; set; }
     }
 }
