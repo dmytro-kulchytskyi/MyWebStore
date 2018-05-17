@@ -9,10 +9,13 @@ namespace MyStore.Business.Providers
     public interface IProvider<T>
         where T : IEntity
     {
-        Task<T> GetById(string id);
-        Task<T> Save(T instance);
-        Task Update(T instance);
-        Task Delete(T instance);
-        Task Delete(string id);
+        IList<T> GetById(IEnumerable<string> ids);
+        int GetCount();
+        IList<T> GetPage(int count, int pageNumber);
+        T GetById(string id);
+        T Save(T instance);
+        void Update(T instance);
+        void Delete(T instance);
+        void Delete(string id);
     }
 }

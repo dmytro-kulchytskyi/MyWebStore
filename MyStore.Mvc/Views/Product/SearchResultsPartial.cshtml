@@ -1,0 +1,12 @@
+﻿@model IEnumerable<MyStore.Mvc.Models.ProductViewModels.ProductListItemViewModel>
+@foreach (var product in Model)
+{
+    <div class="productSerachItem">
+        <img src="~/Content/Images/@product.Image">
+        <div class="productSerachItemInfo">
+            <h4>@Html.ActionLink(product.Title, "Details", "Product", new { link = product.Url, externalProductId = product.ExternalProductId }, null)</h4>
+            <p>Price: @product.Price$</p>
+        </div>
+        <p><input type="button" class="btn btn-success add-to-basket" value="Add to basket" @(product.Stock == 0 ? "disabled='disabled'" : "") /></p>
+    </div>
+}

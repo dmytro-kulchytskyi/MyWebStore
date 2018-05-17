@@ -1,13 +1,15 @@
-﻿
-@{
-    ViewBag.Title = "List";
+﻿@{
+    ViewBag.Title = "All products";
 }
 
-<h2>List</h2>
+<h2>All products</h2>
 
 <hr />
 
-<div id="itemsContainer">
-    @{Html.RenderAction("ProductsPage");}
+<div class="productsList" id="productsContainer">
+    @Html.Action("ProductsPage")
 </div>
 
+@section Scripts {
+    @Scripts.Render("~/Scripts/PructsListScroll.js")
+}

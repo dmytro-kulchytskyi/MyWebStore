@@ -14,8 +14,10 @@ namespace MyStore.Nhibarnate
 {
     public class Configuration
     {
+        private static readonly string connectionStringName = ConfigurationManager.AppSettings["DBConnectionString"];
+
         private static readonly Lazy<ISessionFactory> sessionFactory = new Lazy<ISessionFactory>(() =>
-                Fluently.Configure().Database(MsSqlConfiguration.MsSql2008.ConnectionString(ConfigurationManager.ConnectionStrings["DBLocal"].ToString()).ShowSql())
+                Fluently.Configure().Database(MsSqlConfiguration.MsSql2008.ConnectionString(ConfigurationManager.ConnectionStrings[connectionStringName].ToString()).ShowSql())
                     .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Configuration>())
                     .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(true, true))
                     .BuildSessionFactory(),

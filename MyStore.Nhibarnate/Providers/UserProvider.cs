@@ -16,9 +16,9 @@ namespace MyStore.Nhibarnate.Providers
         {
         }
 
-        public Task<AppUser> GetByEmail(string email)
+        public AppUser GetByEmail(string email)
         {
-            return providerHelper.Invoke(s => s.QueryOver<AppUser>().Where(it => it.Email == email).SingleOrDefaultAsync());
+            return providerHelper.Invoke(s => s.QueryOver<AppUser>().Where(it => it.Email == email).SingleOrDefault());
         }
     }
 }

@@ -44,9 +44,7 @@ namespace MyStore.Controllers
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
-                PhoneNumber = await identityUserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await identityUserManager.GetTwoFactorEnabledAsync(userId),
-                Logins = await identityUserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await identityAuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
             return View(model);

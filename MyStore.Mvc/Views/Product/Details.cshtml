@@ -1,0 +1,21 @@
+﻿@model MyStore.Mvc.Models.ProductViewModels.ProductDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Product Details</h2>
+<hr />
+<div>
+    <div>
+        <h3>@Model.Title</h3>
+        <img src="~/Content/Images/@Model.Image" alt="Image" style="width: 400px; height: 400px;" />
+        <p>@Model.Description</p>
+        <p>@Html.DisplayNameFor(m => m.Stock): @Model.Stock</p>
+        <p>@Html.DisplayNameFor(m => m.Price) @Model.Price$</p>
+        <p><input type="button" class="btn btn-success add-to-basket" value="Add to basket" @(Model.Stock == 0 ? "disabled='disabled'" : "") /></p>
+    </div>
+</div>
+<p>
+    @Html.ActionLink("Back to list", "List", "Product")
+</p>

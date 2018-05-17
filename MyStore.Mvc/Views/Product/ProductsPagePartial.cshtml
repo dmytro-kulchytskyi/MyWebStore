@@ -1,0 +1,6 @@
+﻿@model IEnumerable<MyStore.Mvc.Models.ProductViewModels.ProductListItemViewModel>
+
+@foreach (var product in Model)
+{
+    @Html.Partial("ProductListItemPartial", product);
+}

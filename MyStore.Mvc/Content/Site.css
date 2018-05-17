@@ -22,3 +22,83 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.productsList {
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.productsListItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 200px;
+    height: 300px;
+    margin: 12px;
+    border: 1px solid lightGray;
+    border-radius: 10px;
+}
+
+    .productsListItem:hover {
+        background-color: ghostwhite;
+    }
+
+    .productsListItem.notInStock {
+        background-color: rgb(200, 200, 200);
+    }
+
+        .productsListItem.notInStock a {
+            color: dimgray;
+        }
+
+        .productsListItem.notInStock input[type=button] {
+            background-color: gray;
+            color: black;
+            border-color: gray;
+        }
+
+.searchField {
+    float: left;
+    margin: 8px;
+    margin-left: 10px;
+    width: 280px;
+}
+
+.searchItemsContainer {
+    width: 400px;
+    position: fixed;
+    background-color: #333333;
+    color: white;
+    border-radius: 3px;
+}
+
+.noResultsText {
+    margin: 10px;
+    font-size: 14px;
+    color: white;
+}
+
+.productSerachItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    color: white;
+    border-top: 1px solid #292929;
+}
+
+    .productSerachItem img {
+        height: 40px;
+        width: 40px;
+    }
+
+    .productSerachItem .productSerachItemInfo {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 50%;
+    }

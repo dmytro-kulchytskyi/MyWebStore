@@ -14,19 +14,19 @@ namespace MyStore.Nhibarnate
             this.sessionWrapperFactory = sessionWrapperFactory;
         }
 
-        public async Task<TResult> Invoke<TResult>(Func<ISession, Task<TResult>> func)
+        public TResult Invoke<TResult>(Func<ISession, TResult> func)
         {
             using (var sessionWrapper = sessionWrapperFactory.Create())
-                return await func(sessionWrapper.Session);
+                return func(sessionWrapper.Session);
         }
 
-        public async Task Invoke(Func<ISession, Task> func)
+        public void Invoke(Action<ISession> func)
         {
-            await Invoke<object>(async s =>
+            Invoke<object>(s =>
             {
-                await func(s);
+                func(s);
                 return null;
             });
-        }        
+        }
     }
 }

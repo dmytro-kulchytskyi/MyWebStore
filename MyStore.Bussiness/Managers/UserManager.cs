@@ -14,7 +14,7 @@ namespace MyStore.Business.Managers
         {
         }
 
-        public Task<AppUser> GetByEmail(string email)
+        public AppUser GetByEmail(string email)
         {
             if (string.IsNullOrEmpty(email))
                 throw new ArgumentException(nameof(email));
@@ -22,17 +22,17 @@ namespace MyStore.Business.Managers
             return provider.GetByEmail(email);
         }
 
-        public async Task CreateUser(AppUser user)
+        public  void CreateUser(AppUser user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
             user.Banned = false;
 
-            await provider.Save(user);
+             provider.Save(user);
         }
 
-        public async Task UpdateUser(AppUser user)
+        public  void UpdateUser(AppUser user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
@@ -40,7 +40,7 @@ namespace MyStore.Business.Managers
             if (string.IsNullOrEmpty(user.Id))
                 throw new ArgumentException(nameof(user) + nameof(user.Id));
 
-            await provider.Update(user);
+            provider.Update(user);
         }
     }
 }

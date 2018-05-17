@@ -18,7 +18,7 @@ namespace MyStore.Business.Managers
             this.provider = provider;
         }
 
-        public virtual Task<T> GetById(string id)
+        public virtual T GetById(string id)
         {
             if (string.IsNullOrEmpty(id))
                 throw new ArgumentException(nameof(id));

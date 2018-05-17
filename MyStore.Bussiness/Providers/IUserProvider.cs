@@ -9,6 +9,6 @@ namespace MyStore.Business.Providers
 {
     public interface IUserProvider : IProvider<AppUser>
     {
-        Task<AppUser> GetByEmail(string email);
+        AppUser GetByEmail(string email);
     }
 }

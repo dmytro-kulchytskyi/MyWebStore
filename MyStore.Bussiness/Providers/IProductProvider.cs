@@ -9,7 +9,8 @@ namespace MyStore.Business.Providers
 {
     public interface IProductProvider : IProvider<Product>
     {
-        Task<IList<Product>> GetTopBySellingCount(int count, bool includeBanned = false);
-        Task<IList<Product>> GetSegmentOrderedByByDate(int maxResults, DateTime startDate);
+        IList<Product> GetTopBySellingCount(int count, bool includeBanned = false);
+        IList<Product> GetSegmentOrderedByByDate(int maxResults, DateTime startDate);
+        Product GetByExternalProductId(string externalProductId);
     }
 }

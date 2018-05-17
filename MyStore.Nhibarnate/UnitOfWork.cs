@@ -25,15 +25,15 @@ namespace MyStore.Nhibarnate
             transaction.Begin();
         }
 
-        public async Task Commit()
+        public void Commit()
         {
             try
             {
-                await transaction.Commit();
+                transaction.Commit();
             }
             catch
             {
-                await Rollback();
+                Rollback();
                 throw;
             }
             finally
@@ -42,11 +42,11 @@ namespace MyStore.Nhibarnate
             }
         }
 
-        public async Task Rollback()
+        public void Rollback()
         {
             try
             {
-                await transaction.Rollback();
+                transaction.Rollback();
             }
             finally
             {

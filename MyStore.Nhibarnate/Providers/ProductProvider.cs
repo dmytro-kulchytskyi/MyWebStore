@@ -14,18 +14,23 @@ namespace MyStore.Nhibarnate.Providers
         {
         }
 
-        public Task<IList<Product>> GetSegmentOrderedByByDate(int count, DateTime startDate)
+        public Product GetByExternalProductId(string externalProductId)
+        {
+            return providerHelper.Invoke(s => s.QueryOver<Product>().Where(it => it.ExternalProductId == externalProductId).SingleOrDefault());
+        }
+
+        public IList<Product> GetSegmentOrderedByByDate(int count, DateTime startDate)
         {
             if (count < 1)
                 throw new ArgumentException("Count must be positive number");
 
             return providerHelper.Invoke(s => s.QueryOver<Product>()
-                    .OrderBy(it => it.Added).Desc
-                    .Where(it => it.Added < startDate)
-                    .Take(count).ListAsync());
+                            .OrderBy(it => it.Added).Desc
+                            .Where(it => it.Added < startDate)
+                            .Take(count).List());
         }
 
-        public Task<IList<Product>> GetTopBySellingCount(int count, bool includeBanned = false)
+        public IList<Product> GetTopBySellingCount(int count, bool includeBanned = false)
         {
             if (count < 1)
                 throw new ArgumentException("Count must be positive number");
@@ -37,7 +42,7 @@ namespace MyStore.Nhibarnate.Providers
                 if (!includeBanned)
                     query = query.Where(it => !it.Banned);
 
-                return query.OrderBy(it => it.SellsCount).Desc.Take(count).ListAsync();
+                return query.OrderBy(it => it.SellsCount).Desc.Take(count).List();
             });
         }
     }

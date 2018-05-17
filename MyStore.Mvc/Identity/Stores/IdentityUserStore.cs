@@ -23,22 +23,23 @@ namespace MyStore.Mvc.Identity.Stores
             this.userManager = userManager;
         }
 
-        private Task<IdentityUser> GetIdentityUser(AppUser appUser)
+        private IdentityUser GetIdentityUser(AppUser appUser)
         {
             var identityUser = Mapper.Map<IdentityUser>(appUser);
 
             if (appUser == null)
                 return null;
 
-            return Task.FromResult(identityUser);
+            return identityUser;
         }
 
-        public async Task CreateAsync(IdentityUser user)
+        public Task CreateAsync(IdentityUser user)
         {
             var appUser = Mapper.Map<AppUser>(user);
-            await userManager.CreateUser(appUser);
+            userManager.CreateUser(appUser);
             user.Id = appUser.Id;
 
+            return Task.CompletedTask;
         }
 
         public Task DeleteAsync(IdentityUser user)
@@ -46,22 +47,22 @@ namespace MyStore.Mvc.Identity.Stores
             throw new NotImplementedException();
         }
 
-        public async Task<IdentityUser> FindByIdAsync(string userId)
+        public Task<IdentityUser> FindByIdAsync(string userId)
         {
-            return await GetIdentityUser(await userManager.GetById(userId));
+            return Task.FromResult(GetIdentityUser(userManager.GetById(userId)));
         }
 
-        public async Task<IdentityUser> FindByNameAsync(string userName)
+        public Task<IdentityUser> FindByNameAsync(string userName)
         {
-            return await GetIdentityUser(await userManager.GetByEmail(userName));
+            return Task.FromResult(GetIdentityUser(userManager.GetByEmail(userName)));
         }
 
         public Task UpdateAsync(IdentityUser user)
         {
-            return userManager.UpdateUser(Mapper.Map<AppUser>(user));
+            userManager.UpdateUser(Mapper.Map<AppUser>(user));
+
+            return Task.CompletedTask;
         }
-
-
 
         public Task SetPasswordHashAsync(IdentityUser user, string passwordHash)
         {

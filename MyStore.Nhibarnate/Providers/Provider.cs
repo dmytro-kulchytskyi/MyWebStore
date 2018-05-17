@@ -4,6 +4,7 @@ using MyStore.Nhibarnate;
 using MyStore.Nhibernate.Wrappers.Factories;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +12,11 @@ using System.Threading.Tasks;
 namespace MyStore.Nhibarnate.Providers
 {
     public class Provider<T> : IProvider<T>
-        where T : IEntity
+        where T : class, IEntity
     {
-        private readonly TransactionWrapperFactory transactionWrapperFactory;
+        protected readonly TransactionWrapperFactory transactionWrapperFactory;
+
+        protected readonly SessionWrapperFactory sessionWrapperFactory;
 
         protected readonly ProviderHelper providerHelper;
 
@@ -21,7 +24,7 @@ namespace MyStore.Nhibarnate.Providers
         {
             this.transactionWrapperFactory = transactionWrapperFactory;
 
-            providerHelper = new ProviderHelper(sessionWrapperFactory);
+            providerHelper = new ProviderHelper(this.sessionWrapperFactory = sessionWrapperFactory);
         }
 
         protected UnitOfWork GetUnitOfWork()
@@ -29,53 +32,74 @@ namespace MyStore.Nhibarnate.Providers
             return new UnitOfWork(transactionWrapperFactory);
         }
 
-        public async Task Delete(T instance)
+        public int GetCount()
+        {
+            return providerHelper.Invoke(s => s.QueryOver<T>().RowCount());
+        }
+
+        public IList<T> GetById(IEnumerable<string> ids)
+        {
+            if (ids == null)
+                throw new ArgumentNullException(nameof(ids));
+
+            if (ids.Count() == 0)
+                return new List<T>();
+
+            return providerHelper.Invoke(s => s.QueryOver<T>().WhereRestrictionOn(it => it.Id).IsIn(new Collection<string>(ids.ToList())).List());
+        }
+
+        public void Delete(T instance)
         {
             using (var uow = GetUnitOfWork())
             {
                 uow.BeginTransaction();
-                await providerHelper.Invoke(s => s.DeleteAsync(instance));
-                await uow.Commit();
+                providerHelper.Invoke(s => s.Delete(instance));
+                uow.Commit();
             }
         }
 
-        public async Task Delete(string id)
+        public void Delete(string id)
         {
             using (var uow = GetUnitOfWork())
             {
                 uow.BeginTransaction();
-                await providerHelper.Invoke(async s => s.DeleteAsync(await s.LoadAsync<T>(id)));
-                await uow.Commit();
+                providerHelper.Invoke(s => s.Delete(s.Load<T>(id)));
+                uow.Commit();
             }
         }
 
-        public Task<T> GetById(string id)
+        public T GetById(string id)
         {
-            return providerHelper.Invoke(s => s.GetAsync<T>(id));
+            return providerHelper.Invoke(s => s.Get<T>(id));
         }
 
-        public async Task Update(T instance)
+        public void Update(T instance)
         {
             using (var uow = GetUnitOfWork())
             {
                 uow.BeginTransaction();
-                await providerHelper.Invoke(s => s.UpdateAsync(instance));
-                await uow.Commit();
+                providerHelper.Invoke(s => s.Update(instance));
+                uow.Commit();
             }
         }
 
-        public async Task<T> Save(T instance)
+        public T Save(T instance)
         {
             instance.Id = Guid.NewGuid().ToString();
 
             using (var uow = GetUnitOfWork())
             {
                 uow.BeginTransaction();
-                await providerHelper.Invoke(s => s.SaveAsync(instance));
-                await uow.Commit();
+                providerHelper.Invoke(s => s.Save(instance));
+                uow.Commit();
             }
 
             return instance;
+        }
+
+        public IList<T> GetPage(int count, int pageNumber)
+        {
+            return providerHelper.Invoke(s => s.QueryOver<T>().Skip(pageNumber * count).Take(count).List());
         }
     }
 }

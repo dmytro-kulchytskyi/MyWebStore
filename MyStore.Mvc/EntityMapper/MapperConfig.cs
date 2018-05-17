@@ -13,13 +13,9 @@ namespace MyStore.Mvc.EntityMapper
         {
             var profiles = AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.ExportedTypes)
                     .Where(t => typeof(Profile).GetTypeInfo().IsAssignableFrom(t.GetTypeInfo()))
-                    .Where(t => !t.GetTypeInfo().IsAbstract);
+                    .Where(t => !t.GetTypeInfo().IsAbstract).ToList();
 
-            Mapper.Initialize(cfg =>
-            {
-                foreach (var profile in profiles)
-                    cfg.AddProfile(profile);
-            });
+            Mapper.Initialize(cfg => profiles.ForEach(p => cfg.AddProfile(p)));
         }
     }
 }

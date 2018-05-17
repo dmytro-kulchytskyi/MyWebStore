@@ -45,7 +45,12 @@ namespace MyStore.SearchProvider
                     if (directories.ContainsKey(directoryPath))
                         return directories[directoryPath];
 
-                    var dir = FSDirectory.Open(new DirectoryInfo(directoryPath));
+                    var directory = new DirectoryInfo(directoryPath);
+
+                    if (!directory.Exists)
+                        directory.Create();
+                    
+                    var dir = FSDirectory.Open(directory);
 
                     if (IndexWriter.IsLocked(dir))
                         IndexWriter.Unlock(dir);
@@ -65,7 +70,7 @@ namespace MyStore.SearchProvider
         protected abstract string[] SearchFields { get; }
 
         protected abstract Document MapInstanceToDocument(T instance);
-
+        
         protected Analyzer GetAnalyzer()
         {
             return new StandardAnalyzer(luceneVersion);

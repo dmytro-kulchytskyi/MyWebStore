@@ -1,0 +1,9 @@
+﻿@model IEnumerable<MyStore.Mvc.Models.ProductViewModels.ProductListItemViewModel>
+
+<h2>Top @Model.Count() products</h2>
+<div class="productsList">
+    @foreach (var product in Model)
+    {
+        @Html.Partial("ProductListItemPartial", product);
+    }
+</div>

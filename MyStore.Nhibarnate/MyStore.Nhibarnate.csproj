@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
+    <Compile Include="Mappings\EntityMapBase.cs" />
     <Compile Include="Mappings\ProductMap.cs" />
     <Compile Include="Mappings\AppUserMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

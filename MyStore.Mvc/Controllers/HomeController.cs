@@ -13,22 +13,13 @@ namespace MyStore.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ProductManager productManager;
-
-        public HomeController(ProductManager productManager)
+        [HttpGet]
+        public ActionResult Index()
         {
-            this.productManager = productManager;
+            return View();
         }
 
-        public async Task<ActionResult> Index()
-        {
-            var topProducts = await productManager.GetTopBySellingCount(int.Parse(WebConfigurationManager.AppSettings["TopProductsCount"]));
-
-            var model = Mapper.Map<IEnumerable<ProductListItemViewModel>>(topProducts);
-
-            return View(model);
-        }
-
+        [HttpGet]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -36,6 +27,7 @@ namespace MyStore.Controllers
             return View();
         }
 
+        [HttpGet]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
