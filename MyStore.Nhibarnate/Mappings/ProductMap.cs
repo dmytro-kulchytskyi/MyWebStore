@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace MyStore.Nhibarnate.Mappings
 {
-    public class ProductMap : EntityMapBase<Product>
+    public class ProductMap : ClassMap<Product>
     {
-        public ProductMap() : base()
+        public ProductMap() 
         {
             Table("Product");
+            Id(x => x.Id).GeneratedBy.Assigned();
             Map(x => x.ExternalProductId).Unique().Not.Nullable();
             Map(x => x.Title).Not.Nullable();
             Map(x => x.Description).CustomSqlType("ntext").Not.Nullable();

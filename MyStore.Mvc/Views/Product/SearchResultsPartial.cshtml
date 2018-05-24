@@ -7,6 +7,5 @@
             <h4>@Html.ActionLink(product.Title, "Details", "Product", new { link = product.Url, externalProductId = product.ExternalProductId }, null)</h4>
             <p>Price: @product.Price$</p>
         </div>
-        <p><input type="button" class="btn btn-success add-to-basket" value="Add to basket" @(product.Stock == 0 ? "disabled='disabled'" : "") /></p>
     </div>
 }

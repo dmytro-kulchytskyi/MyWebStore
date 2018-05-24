@@ -47,9 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
     <Compile Include="ProductSearchProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchProvider.cs" />
+    <Compile Include="SearchProviderFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

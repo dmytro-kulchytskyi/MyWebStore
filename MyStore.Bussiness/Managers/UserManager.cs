@@ -17,30 +17,29 @@ namespace MyStore.Business.Managers
         public AppUser GetByEmail(string email)
         {
             if (string.IsNullOrEmpty(email))
-                throw new ArgumentException(nameof(email));
+                throw new ArgumentException($"{nameof(email)} can't be empty");
 
             return provider.GetByEmail(email);
         }
 
-        public  void CreateUser(AppUser user)
+        public void CreateUser(AppUser user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
-            user.Banned = false;
-
-             provider.Save(user);
+            provider.Save(user);
         }
 
-        public  void UpdateUser(AppUser user)
+        public void UpdateUser(AppUser user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
             if (string.IsNullOrEmpty(user.Id))
-                throw new ArgumentException(nameof(user) + nameof(user.Id));
+                throw new ArgumentException("User Id can't be empty");
 
             provider.Update(user);
         }
+        
     }
 }

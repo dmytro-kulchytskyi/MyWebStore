@@ -32,12 +32,12 @@ namespace MyStore.Nhibarnate.Providers
             return new UnitOfWork(transactionWrapperFactory);
         }
 
-        public int GetCount()
+        public virtual int GetCount()
         {
             return providerHelper.Invoke(s => s.QueryOver<T>().RowCount());
         }
 
-        public IList<T> GetById(IEnumerable<string> ids)
+        public virtual IList<T> GetById(IEnumerable<string> ids)
         {
             if (ids == null)
                 throw new ArgumentNullException(nameof(ids));
@@ -45,10 +45,11 @@ namespace MyStore.Nhibarnate.Providers
             if (ids.Count() == 0)
                 return new List<T>();
 
-            return providerHelper.Invoke(s => s.QueryOver<T>().WhereRestrictionOn(it => it.Id).IsIn(new Collection<string>(ids.ToList())).List());
+            return providerHelper.Invoke(s => s.QueryOver<T>()
+                .WhereRestrictionOn(it => it.Id).IsIn(new Collection<string>(ids.ToList())).List());
         }
 
-        public void Delete(T instance)
+        public virtual void Delete(T instance)
         {
             using (var uow = GetUnitOfWork())
             {
@@ -58,7 +59,7 @@ namespace MyStore.Nhibarnate.Providers
             }
         }
 
-        public void Delete(string id)
+        public virtual void Delete(string id)
         {
             using (var uow = GetUnitOfWork())
             {
@@ -68,12 +69,12 @@ namespace MyStore.Nhibarnate.Providers
             }
         }
 
-        public T GetById(string id)
+        public virtual T GetById(string id)
         {
             return providerHelper.Invoke(s => s.Get<T>(id));
         }
 
-        public void Update(T instance)
+        public virtual void Update(T instance)
         {
             using (var uow = GetUnitOfWork())
             {
@@ -83,7 +84,7 @@ namespace MyStore.Nhibarnate.Providers
             }
         }
 
-        public T Save(T instance)
+        public virtual T Save(T instance)
         {
             instance.Id = Guid.NewGuid().ToString();
 
@@ -97,7 +98,7 @@ namespace MyStore.Nhibarnate.Providers
             return instance;
         }
 
-        public IList<T> GetPage(int count, int pageNumber)
+        public virtual IList<T> GetPage(int count, int pageNumber)
         {
             return providerHelper.Invoke(s => s.QueryOver<T>().Skip(pageNumber * count).Take(count).List());
         }

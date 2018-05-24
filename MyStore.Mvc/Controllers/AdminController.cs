@@ -1,4 +1,5 @@
 ﻿using MyStore.Business.Managers;
+using MyStore.Business.Search.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +11,16 @@ namespace MyStore.Mvc.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        private readonly ProductManager productManager;
+        private readonly ProductSearchManager productSearchManager;
 
-        public AdminController(ProductManager productManager)
+        public AdminController(ProductSearchManager productSearchManager)
         {
-            this.productManager = productManager;
+            this.productSearchManager = productSearchManager;
         }
         
         public ActionResult CreateSearchIndex()
         {
-            productManager.CreateSearchIndex();
+            productSearchManager.CreateSearchIndex();
 
             return View();
         }

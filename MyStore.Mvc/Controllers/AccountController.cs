@@ -11,23 +11,38 @@ using Microsoft.Owin.Security;
 using MyStore.Models;
 using MyStore.Mvc.Identity.Managers;
 using MyStore.Mvc.Identity;
+using MyStore.Business.Managers;
+using MyStore.Mvc.Models.AccountViewModels;
+using System.Collections.Generic;
+using AutoMapper;
 
 namespace MyStore.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly UserManager userManager;
+
+        private readonly AddressManager addressManager;
+
         private readonly IdentitySignInManager identitySignInManager;
 
         private readonly IdentityUserManager identityUserManager;
 
         private readonly IAuthenticationManager identityAuthenticationManager;
 
-        public AccountController(IdentityUserManager userManager, IdentitySignInManager signInManager, IAuthenticationManager authenticationManager)
+        public AccountController(IdentityUserManager identityUserManager,
+            IdentitySignInManager identitySignInManager,
+            IAuthenticationManager identityAuthenticationManager,
+            UserManager userManager,
+            AddressManager addressManager)
         {
-            identityUserManager = userManager;
-            identitySignInManager = signInManager;
-            identityAuthenticationManager = authenticationManager;
+            this.userManager = userManager;
+            this.addressManager = addressManager;
+
+            this.identityUserManager = identityUserManager;
+            this.identitySignInManager = identitySignInManager;
+            this.identityAuthenticationManager = identityAuthenticationManager;
         }
 
         //
@@ -98,7 +113,7 @@ namespace MyStore.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await identitySignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await identitySignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -117,7 +132,12 @@ namespace MyStore.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            var model = new RegisterViewModel()
+            {
+                AvailableCountries = Mapper.Map<IList<CountryViewModel>>(addressManager.GetAvailableCountries())
+            };
+
+            return View(model);
         }
 
         //
@@ -127,26 +147,36 @@ namespace MyStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            var availableCountries = addressManager.GetAvailableCountries();
+
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = model.Email };
-                var result = await identityUserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await identitySignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                if (!availableCountries.Any(c => c.Id == model.CountryId))
+                {
+                    ModelState.AddModelError("", "Unsupported country name");
                 }
-                AddErrors(result);
+                else
+                {
+                    var user = new IdentityUser { UserName = model.Email };
+                    var result = await identityUserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        await identitySignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                        // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+                        // Send an email with this link
+                        // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                    AddErrors(result);
+                }
             }
 
-            // If we got this far, something failed, redisplay form
+            model.AvailableCountries = Mapper.Map<IList<CountryViewModel>>(availableCountries);
             return View(model);
         }
 
@@ -381,13 +411,13 @@ namespace MyStore.Controllers
             return View();
         }
 
-      
+
 
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
-     
+
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)

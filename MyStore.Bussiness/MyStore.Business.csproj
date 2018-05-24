@@ -30,9 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppConfiguration.cs" />
     <Compile Include="Entities\Address.cs" />
     <Compile Include="Entities\AppUser.cs" />
     <Compile Include="Entities\Country.cs" />
@@ -49,15 +52,24 @@
     <Compile Include="Entities\Order.cs" />
     <Compile Include="Entities\Product.cs" />
     <Compile Include="IRequestDataStorage.cs" />
+    <Compile Include="Managers\AddressManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\ProductManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\IAddressProvider.cs" />
     <Compile Include="Providers\IProductProvider.cs" />
     <Compile Include="Providers\IProvider.cs" />
     <Compile Include="Providers\IUserProvider.cs" />
     <Compile Include="Search\ISearchProvider.cs" />
-    <Compile Include="Search\SearchProviderIndexManager.cs" />
+    <Compile Include="Search\ISearchProviderFactory.cs" />
+    <Compile Include="Search\Managers\IndexStatus.cs" />
+    <Compile Include="Search\Managers\ProductISearchIndexManager.cs" />
+    <Compile Include="Search\ProductSearchFields.cs" />
+    <Compile Include="Search\Managers\ProductSearchManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Search\Provider\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

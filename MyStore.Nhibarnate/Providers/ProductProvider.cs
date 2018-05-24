@@ -16,7 +16,8 @@ namespace MyStore.Nhibarnate.Providers
 
         public Product GetByExternalProductId(string externalProductId)
         {
-            return providerHelper.Invoke(s => s.QueryOver<Product>().Where(it => it.ExternalProductId == externalProductId).SingleOrDefault());
+            return providerHelper.Invoke(s => s.QueryOver<Product>()
+                .Where(it => it.ExternalProductId == externalProductId).SingleOrDefault());
         }
 
         public IList<Product> GetSegmentOrderedByByDate(int count, DateTime startDate)

@@ -8,15 +8,19 @@ using System.Threading.Tasks;
 
 namespace MyStore.Nhibarnate.Mappings
 {
-    public class AppUserMap : EntityMapBase<AppUser>
+    public class AppUserMap : ClassMap<AppUser>
     {
-        public AppUserMap() : base()
+        public AppUserMap() 
         {
             Table("AppUser");
+            Id(x => x.Id).GeneratedBy.Assigned();
             Map(x => x.Email).Not.Nullable().Unique();
             Map(x => x.PasswordHash).Not.Nullable();
             Map(x => x.Role).Not.Nullable();
             Map(x => x.Banned).Not.Nullable();
+            HasMany(x => x.Address)
+                .KeyColumns.Add("UserId", mapping => mapping.Name("UserId"))
+                .Not.LazyLoad();
         }
     }
 }

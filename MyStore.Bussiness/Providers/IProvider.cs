@@ -11,7 +11,7 @@ namespace MyStore.Business.Providers
     {
         IList<T> GetById(IEnumerable<string> ids);
         int GetCount();
-        IList<T> GetPage(int count, int pageNumber);
+        IList<T> GetPage(int pageSize, int pageNumber);
         T GetById(string id);
         T Save(T instance);
         void Update(T instance);

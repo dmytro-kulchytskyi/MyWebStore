@@ -21,9 +21,19 @@ namespace MyStore.Business.Managers
         public virtual T GetById(string id)
         {
             if (string.IsNullOrEmpty(id))
-                throw new ArgumentException(nameof(id));
+                throw new ArgumentException($"{nameof(id)} can't be empty");
 
             return provider.GetById(id);
+        }
+
+        public virtual int GetCount()
+        {
+            return provider.GetCount();
+        }
+
+        public virtual IList<T> GetPage(int pageSize, int pageNumber)
+        {
+            return provider.GetPage(pageSize, pageNumber);
         }
     }
 }

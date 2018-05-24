@@ -28,8 +28,9 @@ namespace MyStore.Mvc.App_Start.Unity
 
             c.RegisterType<IUserProvider, Nhibarnate.Providers.UserProvider>();
             c.RegisterType<IProductProvider, Nhibarnate.Providers.ProductProvider>();
+            c.RegisterType<IAddressProvider, Nhibarnate.Providers.AddressProvider>();
 
-            c.RegisterType<ISearchProvider<Product>, ProductSearchProvider>();
+            c.RegisterType<ISearchProviderFactory<Product>, ProductSearchProviderFactory>();
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using MyStore.Business.Managers;
+using MyStore.Business.Search;
+using MyStore.Business.Search.Managers;
 using MyStore.Mvc.Models.ProductViewModels;
 using System;
 using System.Collections.Generic;
@@ -15,9 +17,12 @@ namespace MyStore.Mvc.Controllers
     {
         private readonly ProductManager productManager;
 
-        public ProductController(ProductManager productManager)
+        private readonly ProductSearchManager productSearchManager;
+
+        public ProductController(ProductManager productManager, ProductSearchManager productSearchManager)
         {
             this.productManager = productManager;
+            this.productSearchManager = productSearchManager;
         }
 
         // GET: Product
@@ -62,13 +67,14 @@ namespace MyStore.Mvc.Controllers
             return View(model);
         }
 
+
         public ActionResult Search(string query)
         {
             if (!Request.IsAjaxRequest() && !ControllerContext.IsChildAction)
                 return HttpNotFound();
 
-            var searchResultsCount = int.Parse(WebConfigurationManager.AppSettings["SearchResultsCount"]);
-            var products = productManager.Search(query, searchResultsCount);
+          
+            var products = productSearchManager.Search(query, ProductSearchFields.AllExcept(ProductSearchFields.Description), AppConfiguartion.SearchResultsCount);
 
             var model = Mapper.Map<IEnumerable<ProductListItemViewModel>>(products);
             return PartialView("SearchResultsPartial", model);

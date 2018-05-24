@@ -1,4 +1,5 @@
-﻿using MyStore.Business.Entities;
+﻿using AutoMapper;
+using MyStore.Business.Entities;
 using MyStore.Business.Providers;
 using MyStore.Nhibernate.Wrappers.Factories;
 using System;
@@ -11,11 +12,11 @@ namespace MyStore.Nhibarnate.Providers
 {
     public class UserProvider : Provider<AppUser>, IUserProvider
     {
-        public UserProvider(SessionWrapperFactory sessionWrapperFactory, TransactionWrapperFactory transactionWrapperFactory) 
+        public UserProvider(SessionWrapperFactory sessionWrapperFactory, TransactionWrapperFactory transactionWrapperFactory)
             : base(sessionWrapperFactory, transactionWrapperFactory)
         {
         }
-
+        
         public AppUser GetByEmail(string email)
         {
             return providerHelper.Invoke(s => s.QueryOver<AppUser>().Where(it => it.Email == email).SingleOrDefault());

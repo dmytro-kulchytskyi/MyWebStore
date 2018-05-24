@@ -12,13 +12,11 @@ using System.Threading.Tasks;
 
 namespace MyStore.Nhibarnate
 {
-    public class Configuration
+    public class NhibenateSessionFactoryConfigurator
     {
-        private static readonly string connectionStringName = ConfigurationManager.AppSettings["DBConnectionString"];
-
         private static readonly Lazy<ISessionFactory> sessionFactory = new Lazy<ISessionFactory>(() =>
-                Fluently.Configure().Database(MsSqlConfiguration.MsSql2008.ConnectionString(ConfigurationManager.ConnectionStrings[connectionStringName].ToString()).ShowSql())
-                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Configuration>())
+                Fluently.Configure().Database(MsSqlConfiguration.MsSql2008.ConnectionString(ConfigurationManager.ConnectionStrings["DB"].ConnectionString).ShowSql())
+                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<NhibenateSessionFactoryConfigurator>())
                     .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(true, true))
                     .BuildSessionFactory(),
             LazyThreadSafetyMode.PublicationOnly);

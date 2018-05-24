@@ -7,7 +7,6 @@ using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,84 +14,76 @@ using System.Threading.Tasks;
 using MyStore.Business.Entities;
 using Version = Lucene.Net.Util.Version;
 using MyStore.Business.Search;
+using MyStore.Business;
+using MyStore.Lucene;
 
 namespace MyStore.SearchProvider
 {
     public abstract class SearchProvider<T> : ISearchProvider<T>
         where T : class, IEntity
     {
-        private static readonly Dictionary<string, FSDirectory> directories = new Dictionary<string, FSDirectory>();
-
         protected readonly Version luceneVersion = Version.LUCENE_30;
 
-        protected readonly int searchResultsDefaultLimit = int.Parse(ConfigurationManager.AppSettings["SearchResultsDefaultLimit"]);
+        protected readonly int searchResultsDefaultLimit = Configuration.SearchResultsDefaultLimit;
 
-        protected readonly string directoryPath;
-
-        public SearchProvider()
+        public SearchProvider(DirectoryInfo directory)
         {
-            directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                    ConfigurationManager.AppSettings["SearchProviderFolderName"],
-                    typeof(T).FullName);
+            WorkDirectory = directory;
         }
 
-        protected FSDirectory Directory
-        {
-            get
-            {
-                lock (directories)
-                {
-                    if (directories.ContainsKey(directoryPath))
-                        return directories[directoryPath];
+        protected abstract string[] DefaultSearchFields { get; }
 
-                    var directory = new DirectoryInfo(directoryPath);
-
-                    if (!directory.Exists)
-                        directory.Create();
-                    
-                    var dir = FSDirectory.Open(directory);
-
-                    if (IndexWriter.IsLocked(dir))
-                        IndexWriter.Unlock(dir);
-
-                    var lockFilePath = Path.Combine(directoryPath, "write.lock");
-
-                    if (File.Exists(lockFilePath))
-                        File.Delete(lockFilePath);
-
-                    directories.Add(directoryPath, dir);
-
-                    return dir;
-                }
-            }
-        }
-
-        protected abstract string[] SearchFields { get; }
+        protected abstract string[] StoredFields { get; }
 
         protected abstract Document MapInstanceToDocument(T instance);
-        
+
+        public DirectoryInfo WorkDirectory { get; private set; }
+
+
         protected Analyzer GetAnalyzer()
         {
             return new StandardAnalyzer(luceneVersion);
         }
 
+        protected FSDirectory FSDirectory
+        {
+            get
+            {
+                if (WorkDirectory == null)
+                    throw new InvalidOperationException("Work direcotory required");
+
+                if (!WorkDirectory.Exists)
+                    WorkDirectory.Create();
+
+                var directory = FSDirectory.Open(WorkDirectory);
+
+                if (IndexWriter.IsLocked(directory))
+                    IndexWriter.Unlock(directory);
+
+                var lockFilePath = Path.Combine(WorkDirectory.FullName, "write.lock");
+
+                if (File.Exists(lockFilePath))
+                    File.Delete(lockFilePath);
+
+                return directory;
+            }
+        }
+
         protected IndexWriter GetIndexWriter()
         {
-            return new IndexWriter(Directory, GetAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
+            return new IndexWriter(FSDirectory, GetAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
         }
 
         protected Query ParseQuery(string searchQuery, QueryParser parser)
         {
-            Query query;
             try
             {
-                query = parser.Parse(searchQuery.Trim());
+                return parser.Parse(searchQuery.Trim());
             }
             catch (ParseException)
             {
-                query = parser.Parse(QueryParser.Escape(searchQuery.Trim()));
+                return parser.Parse(QueryParser.Escape(searchQuery.Trim()));
             }
-            return query;
         }
 
         public void AddOrUpdate(IEnumerable<T> instances)
@@ -101,13 +92,12 @@ namespace MyStore.SearchProvider
             {
                 foreach (var instance in instances)
                 {
-                    var searchQuery = new TermQuery(new Term(nameof(instance.Id), instance.Id));
+                    var searchQuery = new TermQuery(new Term("Id", instance.Id));
                     writer.DeleteDocuments(searchQuery);
                     writer.AddDocument(MapInstanceToDocument(instance));
                 }
 
-                writer.Analyzer.Close();
-                //writer.Optimize();
+                writer.Analyzer.Dispose();
             }
         }
 
@@ -116,39 +106,65 @@ namespace MyStore.SearchProvider
             AddOrUpdate(new List<T> { instance });
         }
 
-        public string SearchOne(string searchQuery, string searchField = "")
+        public Dictionary<string, string> SearchOne(string searchQuery, IEnumerable<string> resultFields, IEnumerable<string> searchFields = null)
         {
-            return Search(searchQuery, 1, searchField).FirstOrDefault();
+            return Search(searchQuery, resultFields, 1, searchFields).FirstOrDefault();
         }
 
-        public IEnumerable<string> Search(string searchQuery, int maxResults = 0, string searchField = "")
+        public IEnumerable<Dictionary<string, string>> Search(string searchQuery, IEnumerable<string> resultFields, int maxResults = 0, IEnumerable<string> searchFields = null)
         {
-            IEnumerable<string> results = new List<string>();
+            var unstoredFields = resultFields.Where(it => !StoredFields.Contains(it));
 
-            if (string.IsNullOrEmpty(searchQuery)) return results;
+            if (unstoredFields.Count() > 0)
+                throw new InvalidOperationException("Some of the requested fields are unstored: " + string.Join(", ", unstoredFields));
+
+            IEnumerable<Dictionary<string, string>> results = new List<Dictionary<string, string>>();
+
+            if (string.IsNullOrEmpty(searchQuery))
+                return results;
 
             searchQuery = string.Join(" ", searchQuery.Trim().Replace("-", " ").Split(' ')
              .Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim() + "*"));
 
-            if (string.IsNullOrWhiteSpace(searchQuery)) return results;
+            if (string.IsNullOrWhiteSpace(searchQuery))
+                return results;
 
-            using (var searcher = new IndexSearcher(Directory, true))
+            using (var searcher = new IndexSearcher(FSDirectory, true))
             {
                 var hitsLimit = maxResults <= 0 ? searchResultsDefaultLimit : maxResults;
                 var analyzer = GetAnalyzer();
-                QueryParser parser;
 
-                if (!string.IsNullOrEmpty(searchField))
-                    parser = new QueryParser(luceneVersion, searchField, analyzer);
+                QueryParser parser;
+                if (searchFields == null || searchFields.Count() == 0)
+                {
+                    parser = new MultiFieldQueryParser(luceneVersion, DefaultSearchFields, analyzer);
+                }
+                else if (searchFields.Count() == 1)
+                {
+                    parser = new QueryParser(luceneVersion, searchFields.First(), analyzer);
+                }
                 else
-                    parser = new MultiFieldQueryParser(luceneVersion, SearchFields, analyzer);
+                {
+                    parser = parser = new MultiFieldQueryParser(luceneVersion, searchFields.ToArray(), analyzer);
+                }
 
                 var query = ParseQuery(searchQuery, parser);
                 var hits = searcher.Search(query, null, hitsLimit, Sort.RELEVANCE).ScoreDocs;
 
-                results = hits.Select(hit => searcher.Doc(hit.Doc).Get("Id")).ToList();
+                results = hits.Select(hit =>
+                {
+                    var doc = searcher.Doc(hit.Doc);
+                    var result = new Dictionary<string, string>(resultFields.Count());
 
-                analyzer.Close();
+                    foreach (var key in resultFields)
+                    {
+                        result.Add(key, doc.Get(key));
+                    }
+
+                    return result;
+                }).ToList();
+
+                analyzer.Dispose();
             }
 
             return results;
@@ -164,13 +180,22 @@ namespace MyStore.SearchProvider
                     writer.DeleteDocuments(searchQuery);
                 }
 
-                writer.Analyzer.Close();
+                writer.Analyzer.Dispose();
             }
         }
 
         public void Clear(string id)
         {
             Clear(new List<string> { id });
+        }
+
+        public void Optimize()
+        {
+            using (var writer = GetIndexWriter())
+            {
+                writer.Optimize();
+                writer.Analyzer.Dispose();
+            }
         }
     }
 }

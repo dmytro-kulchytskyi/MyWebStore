@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyStore.Business.Search
+namespace MyStore.Business.Providers
 {
-    public class SearchProviderIndexManager<T> where T : IEntity
+    public interface IAddressProvider : IProvider<Address>
     {
-        
+        IList<Country> GetAvailableCountries();
     }
 }

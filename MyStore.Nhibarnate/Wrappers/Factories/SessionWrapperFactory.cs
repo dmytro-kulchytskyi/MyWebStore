@@ -14,7 +14,7 @@ namespace MyStore.Nhibernate.Wrappers.Factories
         }
 
         public SessionWrapper Create() =>
-            new SessionWrapper(requestDataStorage, Configuration.SessionFactory);
+            new SessionWrapper(requestDataStorage, Nhibarnate.NhibenateSessionFactoryConfigurator.SessionFactory);
 
     }
 }

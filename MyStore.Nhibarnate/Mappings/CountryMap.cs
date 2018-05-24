@@ -1,5 +1,4 @@
-﻿using FluentNHibernate.Conventions.Inspections;
-using FluentNHibernate.Mapping;
+﻿using FluentNHibernate.Mapping;
 using MyStore.Business.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace MyStore.Nhibarnate.Mappings
 {
-    public abstract class EntityMapBase<T> : ClassMap<T>
-        where T : IEntity
+    public class CountryMap : ClassMap<Country>
     {
-        public EntityMapBase()
+        public CountryMap()
         {
+            Table("Country");
             Id(x => x.Id).GeneratedBy.Assigned();
+            Map(x => x.Name).Not.Nullable().Unique();
+            Map(x => x.Available).Not.Nullable();
         }
     }
 }

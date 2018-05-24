@@ -217,6 +217,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuartion.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -243,6 +244,7 @@
     <Compile Include="Identity\Services\SmsService.cs" />
     <Compile Include="Identity\Stores\IdentityUserStore.cs" />
     <Compile Include="Models\AccountViewModels\AccountViewModels.cs" />
+    <Compile Include="Models\AccountViewModels\CountryViewModel.cs" />
     <Compile Include="Models\ProductMapperProfile.cs" />
     <Compile Include="Models\ManageViewModels\ManageViewModels.cs" />
     <Compile Include="Models\ProductViewModels\ProductDetailsViewModel.cs" />
