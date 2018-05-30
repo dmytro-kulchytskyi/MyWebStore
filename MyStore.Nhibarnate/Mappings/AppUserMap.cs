@@ -10,7 +10,7 @@ namespace MyStore.Nhibarnate.Mappings
 {
     public class AppUserMap : ClassMap<AppUser>
     {
-        public AppUserMap() 
+        public AppUserMap()
         {
             Table("AppUser");
             Id(x => x.Id).GeneratedBy.Assigned();
@@ -18,9 +18,6 @@ namespace MyStore.Nhibarnate.Mappings
             Map(x => x.PasswordHash).Not.Nullable();
             Map(x => x.Role).Not.Nullable();
             Map(x => x.Banned).Not.Nullable();
-            HasMany(x => x.Address)
-                .KeyColumns.Add("UserId", mapping => mapping.Name("UserId"))
-                .Not.LazyLoad();
         }
     }
 }

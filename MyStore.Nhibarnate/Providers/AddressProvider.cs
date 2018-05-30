@@ -21,5 +21,10 @@ namespace MyStore.Nhibarnate.Providers
         {
             return providerHelper.Invoke(s => s.QueryOver<Country>().Where(it => it.Available).List());
         }
+
+        public IList<Address> GetByUserId(string userId)
+        {
+            return providerHelper.Invoke(s => s.QueryOver<Address>().Where(it => it.UserId == userId).List());
+        }
     }
 }

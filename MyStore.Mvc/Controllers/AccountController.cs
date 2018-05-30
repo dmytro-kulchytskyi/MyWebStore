@@ -50,6 +50,9 @@ namespace MyStore.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+                return HttpNotFound();
+
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -132,6 +135,9 @@ namespace MyStore.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            if (User.Identity.IsAuthenticated)
+                return HttpNotFound();
+
             var model = new RegisterViewModel()
             {
                 AvailableCountries = Mapper.Map<IList<CountryViewModel>>(addressManager.GetAvailableCountries())

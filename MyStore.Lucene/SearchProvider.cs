@@ -135,7 +135,7 @@ namespace MyStore.SearchProvider
 
             using (var searcher = new IndexSearcher(FSDirectory, true))
             {
-                var hitsLimit = searchOptions.MaxResults != 0 ? searchResultsDefaultLimit : searchOptions.MaxResults;
+                var hitsLimit = searchOptions.MaxResults > 0 ? searchOptions.MaxResults : searchOptions.MaxResults;
                 var analyzer = GetAnalyzer();
 
                 QueryParser parser;

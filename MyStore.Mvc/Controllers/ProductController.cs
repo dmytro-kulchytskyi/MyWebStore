@@ -26,7 +26,7 @@ namespace MyStore.Mvc.Controllers
             this.productManager = productManager;
             this.productSearchManager = productSearchManager;
         }
-        
+
         [HttpGet]
         public ActionResult List(ProductsListViewModel model)
         {
@@ -41,6 +41,7 @@ namespace MyStore.Mvc.Controllers
             return View(model);
         }
 
+        
         public ActionResult ProductsPage(ProductsListViewModel model)
         {
             if (!Request.IsAjaxRequest() && !ControllerContext.IsChildAction)
@@ -49,7 +50,7 @@ namespace MyStore.Mvc.Controllers
             if (string.IsNullOrEmpty(model.OrderField))
                 model.OrderField = AppConfiguration.DefaulOrderField;
 
-            model.PageNumber = model.PageNumber <= 0 ? model.PageNumber : 0;
+            model.PageNumber = model.PageNumber <= 0 ? 0 : model.PageNumber;
             model.PageSize = model.PageSize <= 0 ? AppConfiguration.DefaultPageSize : model.PageSize;
 
             if (!AppConfiguration.AvailableProductSortFields.Contains(model.OrderField))
@@ -91,10 +92,10 @@ namespace MyStore.Mvc.Controllers
             return View(model);
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult Search(string query)
         {
-            if (!Request.IsAjaxRequest() && !ControllerContext.IsChildAction)
+            if (!Request.IsAjaxRequest())
                 return HttpNotFound();
 
             var products = productSearchManager.Search(new SearchOptions
@@ -118,7 +119,7 @@ namespace MyStore.Mvc.Controllers
             availableOrderFields.Insert(0, "");
 
             model.AvailableOrderFields = availableOrderFields.ToArray();
-            
+
             model.ResultsCount = model.ResultsCount != 0 ? model.ResultsCount : AppConfiguration.SearchPageMaxItemCount;
 
             var products = productSearchManager.Search(new SearchOptions

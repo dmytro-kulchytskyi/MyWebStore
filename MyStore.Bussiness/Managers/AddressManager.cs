@@ -18,5 +18,10 @@ namespace MyStore.Business.Managers
         {
             return provider.GetAvailableCountries();
         }
+
+        public IList<Address> GetByUserId(string userId)
+        {
+            return provider.GetByUserId(userId);
+        }
     }
 }

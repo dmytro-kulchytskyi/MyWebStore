@@ -20,13 +20,10 @@ namespace MyStore.Nhibarnate
                 return func(sessionWrapper.Session);
         }
 
-        public void Invoke(Action<ISession> func)
+        public void Invoke(Action<ISession> action)
         {
-            Invoke<object>(s =>
-            {
-                func(s);
-                return null;
-            });
+            using (var sessionWrapper = sessionWrapperFactory.Create())
+                action(sessionWrapper.Session);
         }
     }
 }

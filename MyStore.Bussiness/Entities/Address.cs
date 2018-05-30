@@ -8,6 +8,8 @@ namespace MyStore.Business.Entities
     {
         public virtual string Id { get; set; }
 
+        public virtual string UserId { get; set; }
+
         public virtual Country Country { get; set; }
 
         public virtual string City { get; set; }

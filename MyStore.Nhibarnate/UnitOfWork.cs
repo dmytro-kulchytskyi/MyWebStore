@@ -36,22 +36,11 @@ namespace MyStore.Nhibarnate
                 Rollback();
                 throw;
             }
-            finally
-            {
-                Dispose();
-            }
         }
 
         public void Rollback()
         {
-            try
-            {
-                transaction.Rollback();
-            }
-            finally
-            {
-                Dispose();
-            }
+            transaction.Rollback();
         }
 
         public void Dispose()

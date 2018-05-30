@@ -10,5 +10,6 @@ namespace MyStore.Business.Providers
     public interface IAddressProvider : IProvider<Address>
     {
         IList<Country> GetAvailableCountries();
+        IList<Address> GetByUserId(string userId);
     }
 }

@@ -18,6 +18,7 @@ namespace MyStore.Nhibarnate.Mappings
             Map(x => x.Street).Not.Nullable();
             Map(x => x.HouseNumber).Not.Nullable();
             Map(x => x.PostalCode).Not.Nullable();
+            Map(x => x.UserId).Not.Nullable();
         }
     }
 }
