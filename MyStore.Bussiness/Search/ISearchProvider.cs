@@ -12,8 +12,7 @@ namespace MyStore.Business.Search
        where T : IEntity
     {
         DirectoryInfo WorkDirectory { get; }
-        Dictionary<string, string> SearchOne(string searchQuery, IEnumerable<string> resultFields, IEnumerable<string> searchFields = null);
-        IEnumerable<Dictionary<string, string>> Search(string searchQuery, IEnumerable<string> resultFields, int maxResults = 0, IEnumerable<string> searchFields = null);
+        IEnumerable<Dictionary<string, string>> Search(SearchOptions searchOption);
         void AddOrUpdate(T entity);
         void AddOrUpdate(IEnumerable<T> entities);
         void Optimize();

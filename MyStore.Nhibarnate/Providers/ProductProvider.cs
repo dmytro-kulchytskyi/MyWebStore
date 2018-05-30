@@ -1,6 +1,8 @@
-﻿using MyStore.Business.Entities;
+﻿
+using MyStore.Business.Entities;
 using MyStore.Business.Providers;
 using MyStore.Nhibernate.Wrappers.Factories;
+using NHibernate.Criterion;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,16 +22,24 @@ namespace MyStore.Nhibarnate.Providers
                 .Where(it => it.ExternalProductId == externalProductId).SingleOrDefault());
         }
 
-        public IList<Product> GetSegmentOrderedByByDate(int count, DateTime startDate)
-        {
-            if (count < 1)
-                throw new ArgumentException("Count must be positive number");
+        //public IList<Product> GetSegmentOrderedByBy(string fieldName, bool oredrByDesc, int count, string lastLoadedId)
+        //{
+        //    if (count < 1)
+        //        throw new ArgumentException("Count must be positive number");
 
-            return providerHelper.Invoke(s => s.QueryOver<Product>()
-                            .OrderBy(it => it.Added).Desc
-                            .Where(it => it.Added < startDate)
-                            .Take(count).List());
-        }
+        //    return providerHelper.Invoke(s =>
+        //    {
+        //        var firstResultIdCriteria = DetachedCriteria.For<Product>()
+        //        .AddOrder(oredrByDesc ?
+        //            NHibernate.Criterion.Order.Desc(Projections.Property(fieldName)) :
+        //            NHibernate.Criterion.Order.Desc(Projections.Property(fieldName)))
+                    
+        //        .SetMaxResults(1)
+        //        .SetProjection(Projections.Property("Id"));
+                
+        //        return new List<Product>();
+        //    });
+        //}
 
         public IList<Product> GetTopBySellingCount(int count, bool includeBanned = false)
         {

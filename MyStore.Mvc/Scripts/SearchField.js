@@ -26,6 +26,14 @@
         }
     });
 
+    $(input).on("keydown", function (e) {
+        if (e.keyCode === 13) {
+            var inputVal = $(this).val();
+            if (inputVal)
+                window.location = '/SearchPage?' + $.param({ "Query": inputVal });
+        }
+    });
+
     $(input).focusin(function () {
         console.log("ficus")
         if (($(this).val() || "").trim())

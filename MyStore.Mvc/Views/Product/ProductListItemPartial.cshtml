@@ -1,9 +1,9 @@
 ﻿@model MyStore.Mvc.Models.ProductViewModels.ProductListItemViewModel
 
 <div class="productsListItem @(Model.Stock == 0 ? "notInStock" : "")" date="@Model.Added">
-    <h2>@Html.ActionLink(Model.Title, "Details", "Product",new { Link = Model.Url, ExternalProductId = Model.ExternalProductId }, null)</h2>
+    <h2>@Html.ActionLink(Model.Title, "Details", "Product",new { Link = Model.Url, ExternalProductId = Model.ExternalProductId, returnUrl = Request.Url.PathAndQuery }, null)</h2>
     <img alt="Image" src="~/Content/Images/@Model.Image" style="width:150px; height: 150px" />
        
-    <p>Price: @Model.Price$</p>
-    <p><input type="button" class="btn btn-success add-to-basket" value="Add to basket" @(Model.Stock == 0 ? "disabled='disabled'" : "")/></p>
+    <p>Price: @Model.Price.ToString("N2")$</p>
+    <p><input type="button" class="btn btn-success add-to-basket" value="@(Model.Stock == 0 ? "Not in stock" : "Add to basket")" @(Model.Stock == 0 ? "disabled='disabled'" : "")/></p>
 </div>

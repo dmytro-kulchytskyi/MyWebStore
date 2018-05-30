@@ -1,5 +1,6 @@
 ﻿using MyStore.Business.Managers;
 using MyStore.Business.Search.Managers;
+using MyStore.Mvc.Models.AdminViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +18,32 @@ namespace MyStore.Mvc.Controllers
         {
             this.productSearchManager = productSearchManager;
         }
-        
+
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult SearchSettings()
+        {
+            var model = new SearchSettingsViewModel
+            {
+                IndexStatus = productSearchManager.IndexStatus,
+                IndexProgress = productSearchManager.IndexProgress,
+                ErrorMessage = productSearchManager.IndexError
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult CreateSearchIndex()
         {
-            productSearchManager.CreateSearchIndex();
+            if (productSearchManager.IndexStatus != IndexStatus.InProgress)
+                productSearchManager.CreateSearchIndex();
 
-            return View();
+            return RedirectToAction("SearchSettings");
         }
     }
 }

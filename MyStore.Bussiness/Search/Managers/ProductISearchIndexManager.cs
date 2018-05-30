@@ -31,6 +31,7 @@ namespace MyStore.Business.Search.Managers
                     throw new InvalidOperationException("Already indexing");
 
                 indexStatus = IndexStatus.InProgress;
+                indexProgress = 0;
             }
 
             Task.Run(() =>
@@ -48,9 +49,9 @@ namespace MyStore.Business.Search.Managers
                     var pageCount = (int)Math.Ceiling(productManager.GetCount() / (double)batchSize);
                     for (var page = 0; page < pageCount; page++)
                     {
-                        var products = productManager.GetPage(batchSize, page);
+                        var products = productManager.GetPageOrderedBy(ProductFields.Title, true, batchSize, page);
                         searchProvider.AddOrUpdate(products);
-                        indexProgress = pageCount / (double)page;
+                        indexProgress = (double)page / pageCount;
                     }
 
                     searchProvider.Optimize();

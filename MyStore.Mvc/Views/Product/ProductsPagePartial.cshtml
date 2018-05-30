@@ -1,6 +1,7 @@
-﻿@model IEnumerable<MyStore.Mvc.Models.ProductViewModels.ProductListItemViewModel>
+﻿@model MyStore.Mvc.Models.ProductViewModels.ProductsListViewModel
 
-@foreach (var product in Model)
+<datalist pageSize="@Model.PageSize" itemsCount="@Model.Items.Count" pageNumber="@Model.PageNumber" orderField="@Model.OrderField" inverseOrder="@Model.InverseOrder.ToString()" style="display: none;"></datalist>
+@foreach (var product in Model.Items)
 {
     @Html.Partial("ProductListItemPartial", product);
 }

@@ -4,23 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyStore.Business.Search
+namespace MyStore.Business
 {
-    public static class ProductSearchFields
+    public static class ProductFields
     {
         public const string Id = "Id";
         public const string Title = "Title";
         public const string ExternalProductId = "ExternalProductId";
         public const string Image = "Image";
         public const string Description = "Description";
-        public const string Price = "Prise";
+        public const string Price = "Price";
         public const string SellsCount = "SellsCount";
         public const string Banned = "Banned";
         public const string Stock = "Stock";
         public const string Added = "Added";
 
-        public static string[] All => typeof(ProductSearchFields).GetFields()
-            .Where(f => f.IsLiteral && !f.IsInitOnly)
+        public static string[] All => typeof(ProductFields).GetFields()
+            .Where(f => f.IsLiteral && !f.IsInitOnly && f.IsPublic)
             .Select(p => (string)p.GetRawConstantValue())
             .ToArray();
 

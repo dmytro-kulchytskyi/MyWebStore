@@ -31,5 +31,8 @@ namespace MyStore.Mvc.Models.ProductViewModels
 
         [Display(Name = "Stock")]
         public int Stock { get; set; }
+
+        [ScaffoldColumn(false)]
+        public string ReturnUrl { get; set; }
     }
 }

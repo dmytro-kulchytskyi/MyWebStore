@@ -2,6 +2,7 @@
 using MyStore.Business.Providers;
 using MyStore.Nhibarnate;
 using MyStore.Nhibernate.Wrappers.Factories;
+using NHibernate.Criterion;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -98,9 +99,13 @@ namespace MyStore.Nhibarnate.Providers
             return instance;
         }
 
-        public virtual IList<T> GetPage(int count, int pageNumber)
+        public virtual IList<T> GetPageOrderedBy(string fieldName, bool desc, int pageSize, int pageNumber)
         {
-            return providerHelper.Invoke(s => s.QueryOver<T>().Skip(pageNumber * count).Take(count).List());
+            return providerHelper.Invoke(s =>
+            {
+                var query = s.QueryOver<T>().OrderBy(Projections.Property(fieldName));
+                return (desc ? query.Desc : query.Asc).Skip(pageNumber * pageSize).Take(pageSize).List();
+            });
         }
     }
 }

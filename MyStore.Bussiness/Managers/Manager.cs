@@ -31,9 +31,9 @@ namespace MyStore.Business.Managers
             return provider.GetCount();
         }
 
-        public virtual IList<T> GetPage(int pageSize, int pageNumber)
+        public IList<T> GetPageOrderedBy(string fieldName, bool desc, int pageSize, int pageNumber)
         {
-            return provider.GetPage(pageSize, pageNumber);
+            return provider.GetPageOrderedBy(fieldName, desc, pageSize, pageNumber);
         }
     }
 }

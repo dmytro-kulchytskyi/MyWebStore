@@ -1,0 +1,36 @@
+﻿@using MyStore.Business.Search.Managers;
+
+@model MyStore.Mvc.Models.AdminViewModels.SearchSettingsViewModel
+
+@{
+    ViewBag.Title = "Search settings";
+}
+
+<h2>Search settings</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(m => m.IndexStatus)</dt>
+        <dd>@Model.IndexStatus.ToString()</dd>
+        @if (Model.IndexStatus == IndexStatus.InProgress)
+        {
+            <dt>@Html.DisplayNameFor(m => m.IndexProgress)</dt>
+            <dd>@((Model.IndexProgress * 100).ToString("F3"))%</dd>
+        }
+        else if (Model.IndexStatus == IndexStatus.Failed)
+        {
+            <dt>@Html.DisplayNameFor(m => m.ErrorMessage)</dt>
+            <dd>@Model.ErrorMessage</dd>
+        }
+    </dl>
+    <div>
+        @if (Model.IndexStatus != IndexStatus.InProgress)
+        {
+            using (Html.BeginForm("CreateSearchIndex", "Admin", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <input type="submit" value="Create search index" class="btn btn-default" />
+            }
+        }
+    </div>
+</div>

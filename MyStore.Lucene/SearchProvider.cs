@@ -39,7 +39,6 @@ namespace MyStore.SearchProvider
 
         public DirectoryInfo WorkDirectory { get; private set; }
 
-
         protected Analyzer GetAnalyzer()
         {
             return new StandardAnalyzer(luceneVersion);
@@ -106,24 +105,29 @@ namespace MyStore.SearchProvider
             AddOrUpdate(new List<T> { instance });
         }
 
-        public Dictionary<string, string> SearchOne(string searchQuery, IEnumerable<string> resultFields, IEnumerable<string> searchFields = null)
-        {
-            return Search(searchQuery, resultFields, 1, searchFields).FirstOrDefault();
-        }
 
-        public IEnumerable<Dictionary<string, string>> Search(string searchQuery, IEnumerable<string> resultFields, int maxResults = 0, IEnumerable<string> searchFields = null)
+        public IEnumerable<Dictionary<string, string>> Search(SearchOptions searchOptions)
         {
-            var unstoredFields = resultFields.Where(it => !StoredFields.Contains(it));
+            if (searchOptions == null)
+                throw new ArgumentNullException(nameof(searchOptions));
+
+            if (searchOptions.ResultFields == null || searchOptions.ResultFields.Count() == 0)
+                throw new ArgumentException($"{nameof(searchOptions.ResultFields)} required");
+
+            if (searchOptions.MaxResults < 0)
+                throw new ArgumentException($"{searchOptions.MaxResults} can't be negative");
+
+            var unstoredFields = searchOptions.ResultFields.Where(it => !StoredFields.Contains(it));
 
             if (unstoredFields.Count() > 0)
                 throw new InvalidOperationException("Some of the requested fields are unstored: " + string.Join(", ", unstoredFields));
 
             IEnumerable<Dictionary<string, string>> results = new List<Dictionary<string, string>>();
 
-            if (string.IsNullOrEmpty(searchQuery))
+            if (string.IsNullOrEmpty(searchOptions.Query))
                 return results;
 
-            searchQuery = string.Join(" ", searchQuery.Trim().Replace("-", " ").Split(' ')
+            var searchQuery = string.Join(" ", searchOptions.Query.Trim().Replace("-", " ").Split(' ')
              .Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim() + "*"));
 
             if (string.IsNullOrWhiteSpace(searchQuery))
@@ -131,32 +135,43 @@ namespace MyStore.SearchProvider
 
             using (var searcher = new IndexSearcher(FSDirectory, true))
             {
-                var hitsLimit = maxResults <= 0 ? searchResultsDefaultLimit : maxResults;
+                var hitsLimit = searchOptions.MaxResults != 0 ? searchResultsDefaultLimit : searchOptions.MaxResults;
                 var analyzer = GetAnalyzer();
 
                 QueryParser parser;
-                if (searchFields == null || searchFields.Count() == 0)
+                if (searchOptions.SearchFields == null || searchOptions.SearchFields.Count() == 0)
                 {
                     parser = new MultiFieldQueryParser(luceneVersion, DefaultSearchFields, analyzer);
                 }
-                else if (searchFields.Count() == 1)
+                else if (searchOptions.SearchFields.Count() == 1)
                 {
-                    parser = new QueryParser(luceneVersion, searchFields.First(), analyzer);
+                    parser = new QueryParser(luceneVersion, searchOptions.SearchFields.First(), analyzer);
                 }
                 else
                 {
-                    parser = parser = new MultiFieldQueryParser(luceneVersion, searchFields.ToArray(), analyzer);
+                    parser = parser = new MultiFieldQueryParser(luceneVersion, searchOptions.SearchFields.ToArray(), analyzer);
                 }
 
                 var query = ParseQuery(searchQuery, parser);
-                var hits = searcher.Search(query, null, hitsLimit, Sort.RELEVANCE).ScoreDocs;
+
+                Sort sort;
+                if (string.IsNullOrEmpty(searchOptions.SortField))
+                {
+                    sort = Sort.RELEVANCE;
+                }
+                else
+                {
+                    sort = new Sort(new SortField(searchOptions.SortField, SortField.STRING, searchOptions.InverseOrder));
+                }
+
+                var hits = searcher.Search(query, null, hitsLimit, sort).ScoreDocs;
 
                 results = hits.Select(hit =>
                 {
                     var doc = searcher.Doc(hit.Doc);
-                    var result = new Dictionary<string, string>(resultFields.Count());
+                    var result = new Dictionary<string, string>(searchOptions.ResultFields.Count());
 
-                    foreach (var key in resultFields)
+                    foreach (var key in searchOptions.ResultFields)
                     {
                         result.Add(key, doc.Get(key));
                     }

@@ -217,7 +217,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuartion.cs" />
+    <Compile Include="AppConfiguration.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -245,10 +245,13 @@
     <Compile Include="Identity\Stores\IdentityUserStore.cs" />
     <Compile Include="Models\AccountViewModels\AccountViewModels.cs" />
     <Compile Include="Models\AccountViewModels\CountryViewModel.cs" />
+    <Compile Include="Models\AdminViewModels\SearchSettingsViewModel.cs" />
     <Compile Include="Models\ProductMapperProfile.cs" />
     <Compile Include="Models\ManageViewModels\ManageViewModels.cs" />
     <Compile Include="Models\ProductViewModels\ProductDetailsViewModel.cs" />
     <Compile Include="Models\ProductViewModels\ProductListItemViewModel.cs" />
+    <Compile Include="Models\ProductViewModels\ProductSearchListViewModel.cs" />
+    <Compile Include="Models\ProductViewModels\ProductsListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestDataStorage.cs" />
     <Compile Include="Startup.cs" />
@@ -268,16 +271,21 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.3.1.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.3.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\PructsListScroll.js" />
+    <Content Include="Scripts\ProductsSortBar.js" />
+    <Content Include="Scripts\ProductsListScroll.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\SearchField.js" />
@@ -314,6 +322,9 @@
     <Content Include="Views\Shared\SearchFieldPartial.cshtml" />
     <Content Include="Views\Product\SearchResultsPartial.cshtml" />
     <Content Include="Views\Admin\CreateSearchIndex.cshtml" />
+    <Content Include="Views\Product\SearchPage.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\SearchSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -329,7 +340,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyStore.Bussiness\MyStore.Business.csproj">

@@ -27,7 +27,7 @@ textarea {
     flex-wrap: wrap;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -38,7 +38,8 @@ textarea {
     align-items: center;
     width: 200px;
     height: 300px;
-    margin: 12px;
+    margin-top: 12px;
+    margin-bottom: 12px;
     border: 1px solid lightGray;
     border-radius: 10px;
 }
@@ -106,3 +107,21 @@ textarea {
         justify-content: flex-start;
         width: 50%;
     }
+
+.productsSortBar {
+    display: flex;
+    width: 600px;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+}
+
+    .productsSortBar .productsSortBarInput {
+        margin: 3px;
+        margin-right: 8px;
+        border-radius: 3px;
+    }
+
+.productsSort input[type=submit] {
+    border-radius: 5px;
+}

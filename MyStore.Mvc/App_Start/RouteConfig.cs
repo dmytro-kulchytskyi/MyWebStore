@@ -27,6 +27,12 @@ namespace MyStore
             );
 
             routes.MapRoute(
+                name: "SearchPage",
+                url: "SearchPage/{query}",
+                defaults: new { controller = "Product", action = "SearchPage", query = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

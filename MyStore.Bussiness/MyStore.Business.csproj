@@ -65,8 +65,9 @@
     <Compile Include="Search\ISearchProviderFactory.cs" />
     <Compile Include="Search\Managers\IndexStatus.cs" />
     <Compile Include="Search\Managers\ProductISearchIndexManager.cs" />
-    <Compile Include="Search\ProductSearchFields.cs" />
+    <Compile Include="ProductSearchFields.cs" />
     <Compile Include="Search\Managers\ProductSearchManager.cs" />
+    <Compile Include="Search\SearchOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Search\Provider\" />

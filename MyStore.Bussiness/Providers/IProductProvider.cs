@@ -10,7 +10,6 @@ namespace MyStore.Business.Providers
     public interface IProductProvider : IProvider<Product>
     {
         IList<Product> GetTopBySellingCount(int count, bool includeBanned = false);
-        IList<Product> GetSegmentOrderedByByDate(int maxResults, DateTime startDate);
         Product GetByExternalProductId(string externalProductId);
     }
 }

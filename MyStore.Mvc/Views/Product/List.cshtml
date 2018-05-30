@@ -1,4 +1,6 @@
-﻿@{
+﻿@model MyStore.Mvc.Models.ProductViewModels.ProductsListViewModel
+
+@{
     ViewBag.Title = "All products";
 }
 
@@ -6,10 +8,36 @@
 
 <hr />
 
+@using (Html.BeginForm("List", "Product", FormMethod.Post, new { @class = "productsSortBar", role = "form", id = "productListSortBar" }))
+{
+    @Html.DropDownListFor(m => m.OrderField, Model.AvailableOrderFields.Select(f => new SelectListItem
+    {
+        Value = f,
+        Text = f
+    }), new { @class = "productsSortBarInput" })
+
+    @Html.DropDownListFor(m => m.InverseOrder, new SelectListItem[] {
+new SelectListItem
+{
+Text = "Default",
+Value = false.ToString()
+},
+new SelectListItem
+{
+Text = "Inverse",
+Value = true.ToString()
+}
+}, new { @class = "productsSortBarInput" })
+    <input type="submit" value="Sort" class="productsSortBarInput">
+}
+
+<hr />
+
 <div class="productsList" id="productsContainer">
-    @Html.Action("ProductsPage")
+    @Html.Action("ProductsPage", Model)
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/Scripts/PructsListScroll.js")
+    @Scripts.Render("~/Scripts/ProductsListScroll.js")
+    @Scripts.Render("~/Scripts/ProductsSortBar.js");
 }

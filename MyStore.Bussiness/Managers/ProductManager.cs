@@ -24,10 +24,5 @@ namespace MyStore.Business.Managers
         {
             return provider.GetTopBySellingCount(count);
         }
-
-        public IList<Product> GetSegmentOrderedByByDate(int count, DateTime startDate)
-        {
-            return provider.GetSegmentOrderedByByDate(count, startDate);
-        }
     }
 }
