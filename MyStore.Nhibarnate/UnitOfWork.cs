@@ -7,11 +7,13 @@ namespace MyStore.Nhibarnate
 {
     public class UnitOfWork : IDisposable
     {
-        private readonly TransactionWrapper transaction;
+        private TransactionWrapper transaction;
+
+        private readonly TransactionWrapperFactory transactionWrapperFactory;
 
         public UnitOfWork(TransactionWrapperFactory transactionWrapperFactory)
         {
-            transaction = transactionWrapperFactory.Create();
+            this.transactionWrapperFactory = transactionWrapperFactory;
         }
 
         public bool IsActive => transaction.IsActive;
@@ -22,7 +24,8 @@ namespace MyStore.Nhibarnate
 
         public void BeginTransaction()
         {
-            transaction.Begin();
+            if (transaction == null || transaction.IsCommited || transaction.IsRolledBack)
+                (transaction = transactionWrapperFactory.Create()).Begin();
         }
 
         public void Commit()
@@ -45,7 +48,7 @@ namespace MyStore.Nhibarnate
 
         public void Dispose()
         {
-            transaction.Dispose();
+            transaction?.Dispose();
         }
     }
 }

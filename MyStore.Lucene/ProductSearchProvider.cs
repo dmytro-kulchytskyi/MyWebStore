@@ -23,7 +23,6 @@ namespace MyStore.Lucene
         {
             ProductFields.Title,
             ProductFields.Description,
-            ProductFields.ExternalProductId
         };
 
         protected override string[] StoredFields => ProductFields.AllExcept(ProductFields.Description);
@@ -37,8 +36,7 @@ namespace MyStore.Lucene
             doc.Add(new Field(ProductFields.Description, instance.Description, Field.Store.NO, Field.Index.ANALYZED));
 
             doc.Add(new Field(ProductFields.Title, instance.Title, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field(ProductFields.ExternalProductId, instance.ExternalProductId, Field.Store.YES, Field.Index.ANALYZED));
-
+            
             doc.Add(new Field(ProductFields.Added, instance.Added.ToString("o"), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field(ProductFields.Banned, instance.Banned.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field(ProductFields.Image, instance.Image, Field.Store.YES, Field.Index.NOT_ANALYZED));

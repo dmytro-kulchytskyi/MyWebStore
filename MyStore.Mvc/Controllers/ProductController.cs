@@ -66,21 +66,21 @@ namespace MyStore.Mvc.Controllers
         public ActionResult TopProducts()
         {
             var count = int.Parse(WebConfigurationManager.AppSettings["TopProductsCount"]);
-            var products = productManager.GetTopBySellingCount(count);
+            var products = productManager.GetTop(ProductFields.SellsCount, count);
 
             var model = Mapper.Map<IEnumerable<ProductListItemViewModel>>(products);
             return PartialView("TopProductsPartial", model);
         }
 
         [HttpGet]
-        public ActionResult Details(string externalProductId, string returnUrl)
+        public ActionResult Details(string id, string returnUrl)
         {
             var url = Request.Url;
 
-            if (string.IsNullOrEmpty(externalProductId))
+            if (string.IsNullOrEmpty(id))
                 return HttpNotFound();
 
-            var product = productManager.GetByExternalProductId(externalProductId);
+            var product = productManager.GetById(id);
             if (product == null)
                 return HttpNotFound();
 

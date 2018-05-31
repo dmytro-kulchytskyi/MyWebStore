@@ -7,9 +7,9 @@
             <h4>
                 @Html.ActionLink(product.Title, "Details", "Product", new
                 {
-                    link = product.Url,
-                    externalProductId = product.ExternalProductId,
-                    returnUrl = (Request.IsAjaxRequest() ? Request.UrlReferrer : Request.Url).PathAndQuery
+                    Link = product.Url,
+                    Id = product.Id,
+                    ReturnUrl = (Request.IsAjaxRequest() ? Request.UrlReferrer : Request.Url).PathAndQuery
                 }, null)
             </h4>
             <p>Price: @product.Price.ToString("C2")</p>

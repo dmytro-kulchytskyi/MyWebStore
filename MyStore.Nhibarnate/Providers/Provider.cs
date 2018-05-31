@@ -87,7 +87,8 @@ namespace MyStore.Nhibarnate.Providers
 
         public virtual T Save(T instance)
         {
-            instance.Id = Guid.NewGuid().ToString();
+            if (string.IsNullOrEmpty(instance.Id))
+                instance.Id = Guid.NewGuid().ToString();
 
             using (var uow = GetUnitOfWork())
             {

@@ -1,9 +1,25 @@
 ﻿@model MyStore.Mvc.Models.ProductViewModels.ProductListItemViewModel
 
-<div class="productsListItem @(Model.Stock == 0 ? "notInStock" : "")" date="@Model.Added">
-    <h2>@Html.ActionLink(Model.Title, "Details", "Product",new { Link = Model.Url, ExternalProductId = Model.ExternalProductId, returnUrl = Request.Url.PathAndQuery }, null)</h2>
+<div class="productsListItem @(Model.Stock == 0 ? "notInStock" : "")">
+    <h2>
+        @Html.ActionLink(Model.Title, "Details", "Product", new
+        {
+            Link = Model.Url,
+            Id = Model.Id,
+            returnUrl = Request.Url.PathAndQuery
+        }, null)
+    </h2>
     <img alt="Image" src="~/Content/Images/@Model.Image" style="width:150px; height: 150px" />
-       
-    <p>Price: @Model.Price.ToString("C2")</p>
-    <p><input type="button" class="btn btn-success add-to-basket" value="@(Model.Stock == 0 ? "Not in stock" : "Add to basket")" @(Model.Stock == 0 ? "disabled='disabled'" : "")/></p>
+
+    <p>@Html.DisplayNameFor(m => m.Price): @Model.Price.ToString("C2")</p>
+    <p>
+        @if (Model.Stock > 0)
+        {
+            <input type="button" class="btn btn-success add-to-basket" value="Add to basket" />
+        }
+        else
+        {
+            <input type="button" class="btn add-to-basket" value="Not in stock" disabled="disabled" />
+        }
+    </p>
 </div>

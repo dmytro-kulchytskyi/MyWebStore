@@ -7,9 +7,7 @@ namespace MyStore.Business.Entities
     public class Product : IEntity
     {
         public virtual string Id { get; set; }
-
-        public virtual string ExternalProductId { get; set; }
-
+        
         public virtual string Title { get; set; }
 
         public virtual string Image { get; set; }

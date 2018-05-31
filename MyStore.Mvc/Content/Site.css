@@ -54,11 +54,12 @@ textarea {
             color: dimgray;
         }
 
-        .productsListItem.notInStock input[type=button] {
-            background-color: gray;
-            color: black;
-            border-color: gray;
-        }
+.btn.add-to-basket:disabled,
+.btn.add-to-basket[disabled] {
+    background-color: gray;
+    color: black;
+    border-color: gray;
+}
 
 .searchField {
     float: left;

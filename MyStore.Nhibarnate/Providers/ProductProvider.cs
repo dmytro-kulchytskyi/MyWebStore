@@ -16,32 +16,8 @@ namespace MyStore.Nhibarnate.Providers
         {
         }
 
-        public Product GetByExternalProductId(string externalProductId)
-        {
-            return providerHelper.Invoke(s => s.QueryOver<Product>()
-                .Where(it => it.ExternalProductId == externalProductId).SingleOrDefault());
-        }
 
-        //public IList<Product> GetSegmentOrderedByBy(string fieldName, bool oredrByDesc, int count, string lastLoadedId)
-        //{
-        //    if (count < 1)
-        //        throw new ArgumentException("Count must be positive number");
-
-        //    return providerHelper.Invoke(s =>
-        //    {
-        //        var firstResultIdCriteria = DetachedCriteria.For<Product>()
-        //        .AddOrder(oredrByDesc ?
-        //            NHibernate.Criterion.Order.Desc(Projections.Property(fieldName)) :
-        //            NHibernate.Criterion.Order.Desc(Projections.Property(fieldName)))
-                    
-        //        .SetMaxResults(1)
-        //        .SetProjection(Projections.Property("Id"));
-                
-        //        return new List<Product>();
-        //    });
-        //}
-
-        public IList<Product> GetTopBySellingCount(int count, bool includeBanned = false)
+        public IList<Product> GetTop(string fieldName, int count, bool includeBanned = false)
         {
             if (count < 1)
                 throw new ArgumentException("Count must be positive number");
@@ -53,7 +29,7 @@ namespace MyStore.Nhibarnate.Providers
                 if (!includeBanned)
                     query = query.Where(it => !it.Banned);
 
-                return query.OrderBy(it => it.SellsCount).Desc.Take(count).List();
+                return query.OrderBy(Projections.Property(fieldName)).Desc.Take(count).List();
             });
         }
     }

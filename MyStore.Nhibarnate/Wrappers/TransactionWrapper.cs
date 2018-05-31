@@ -1,5 +1,4 @@
-﻿
-using NHibernate;
+﻿using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,25 +38,26 @@ namespace MyStore.Nhibernate.Wrappers
 
         public bool IsRolledBack => Transaction?.WasRolledBack ?? false;
 
-        private bool IsBaseTransaction => parent == null || !parent.IsActive;
+        private bool IsBaseTransaction => !parent?.IsActive != true;
 
         public void Begin()
         {
-            if (Transaction == null || !Transaction.IsActive)
-                Transaction = IsBaseTransaction ? sessionWrapper.Session.BeginTransaction() : parent.Transaction;
+            if (Transaction?.IsActive != true)
+            {
+                Transaction = IsBaseTransaction ? 
+                    sessionWrapper.Session.BeginTransaction() : parent.Transaction;
+            }
         }
 
-        public Task Rollback()
+        public void Rollback()
         {
-            return Transaction.RollbackAsync();
+            Transaction.Rollback();
         }
 
-        public Task Commit()
+        public void Commit()
         {
             if (IsBaseTransaction)
-                return Transaction.CommitAsync();
-
-            return Task.CompletedTask;
+                Transaction.Commit();
         }
 
         public void Dispose()

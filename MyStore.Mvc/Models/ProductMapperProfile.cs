@@ -27,7 +27,7 @@ namespace MyStore.Mvc.Models.EntityMapperProfiles
                .ForMember(x => x.Image, m => m.MapFrom(a => a[ProductFields.Image]))
                .ForMember(x => x.Added, m => m.MapFrom(a => DateTime.Parse(a[ProductFields.Added])))
                .ForMember(x => x.Banned, m => m.MapFrom(a => bool.Parse(a[ProductFields.Banned])))
-               .ForMember(x => x.ExternalProductId, m => m.MapFrom(a => a[ProductFields.ExternalProductId]))
+               .ForMember(x => x.Id, m => m.MapFrom(a => a[ProductFields.Id]))
                .ForMember(x => x.Price, m => m.MapFrom(a => double.Parse(a[ProductFields.Price])))
                .ForMember(x => x.SellsCount, m => m.MapFrom(a => int.Parse(a[ProductFields.SellsCount])))
                .ForMember(x => x.Stock, m => m.MapFrom(a => int.Parse(a[ProductFields.Stock])));

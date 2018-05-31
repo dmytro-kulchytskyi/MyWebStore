@@ -7,7 +7,7 @@ namespace MyStore.Mvc.Models.ProductViewModels
 {
     public class ProductListItemViewModel
     {
-        public string ExternalProductId { get; set; }
+        public string Id { get; set; }
 
         public string Title { get; set; }
 

@@ -4,6 +4,7 @@
 }
 
 <h2>Search</h2>
+
 <hr />
 @using (Html.BeginForm("SearchPage", "Product", FormMethod.Post, new { @class = "productsSortBar", role = "form", id = "productListSortBar" }))
 {
@@ -15,22 +16,24 @@
         Text = string.IsNullOrEmpty(f) ? "Relevant" : f
     }), new { @class = "productsSortBarInput" })
 
-    @Html.DropDownListFor(m => m.InverseOrder, new SelectListItem[] {
-        new SelectListItem
+    @Html.DropDownListFor(m => m.InverseOrder, new SelectListItem[] 
         {
-        Text = "Default",
-        Value = false.ToString()
-        },
-        new SelectListItem
-        {
-        Text = "Inverse",
-        Value = true.ToString()
-        }
+            new SelectListItem
+            {
+                Text = "Default",
+                Value = false.ToString()
+            },
+            new SelectListItem
+            {
+                Text = "Inverse",
+                Value = true.ToString()
+            }
         }, new { @class = "productsSortBarInput", style = "display: none" })
     <input type="submit" value="Search" class="productsSortBarInput">
 }
 
 <hr />
+
 <div class="productsList" id="productsContainer">
     @if (Model.Items?.Count > 0)
     {

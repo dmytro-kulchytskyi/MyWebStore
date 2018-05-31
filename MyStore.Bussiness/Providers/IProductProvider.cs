@@ -9,7 +9,6 @@ namespace MyStore.Business.Providers
 {
     public interface IProductProvider : IProvider<Product>
     {
-        IList<Product> GetTopBySellingCount(int count, bool includeBanned = false);
-        Product GetByExternalProductId(string externalProductId);
+        IList<Product> GetTop(string fieldName, int count, bool includeBanned = false);
     }
 }

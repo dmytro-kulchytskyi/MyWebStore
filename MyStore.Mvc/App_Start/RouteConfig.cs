@@ -21,9 +21,9 @@ namespace MyStore
 
             routes.MapRoute(
                name: "ProductDetails",
-               url: "Product/{link}_{externalProductId}",
+               url: "Product/{link}_{id}",
                defaults: new { controller = "Product", action = "Details" },
-               constraints: new { link = @"[A-Za-zА-Яа-яі0-9\-]+", externalProductId = @"[A-Za-zА-Яа-яі0-9\-]+" }
+               constraints: new { link = @"[A-Za-zА-Яа-яі0-9\-]+", id = @"[A-Za-zА-Яа-яі0-9\-]+" }
             );
 
             routes.MapRoute(

@@ -14,7 +14,6 @@ namespace MyStore.Nhibarnate.Mappings
         {
             Table("Product");
             Id(x => x.Id).GeneratedBy.Assigned();
-            Map(x => x.ExternalProductId).Unique().Not.Nullable();
             Map(x => x.Title).Not.Nullable();
             Map(x => x.Description).CustomSqlType("ntext").Not.Nullable();
             Map(x => x.Image).Not.Nullable();

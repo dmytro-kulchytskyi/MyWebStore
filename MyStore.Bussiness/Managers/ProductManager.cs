@@ -15,14 +15,10 @@ namespace MyStore.Business.Managers
         {
         }
 
-        public Product GetByExternalProductId(string externalProductId)
-        {
-            return provider.GetByExternalProductId(externalProductId);
-        }
 
-        public IList<Product> GetTopBySellingCount(int count)
+        public IList<Product> GetTop(string fieldName, int count)
         {
-            return provider.GetTopBySellingCount(count);
+            return provider.GetTop(fieldName, count);
         }
     }
 }
