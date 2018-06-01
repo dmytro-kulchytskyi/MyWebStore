@@ -31,7 +31,7 @@ namespace MyStore.Business.Managers
             return provider.GetCount();
         }
 
-        public IList<T> GetPageOrderedBy(string fieldName, bool desc, int pageSize, int pageNumber)
+        public ListSegment<T> GetPageOrderedBy(string fieldName, bool desc, int pageSize, int pageNumber)
         {
             return provider.GetPageOrderedBy(fieldName, desc, pageSize, pageNumber);
         }

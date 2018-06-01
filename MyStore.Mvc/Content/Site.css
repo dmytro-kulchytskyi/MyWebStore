@@ -126,3 +126,31 @@ textarea {
 .productsSort input[type=submit] {
     border-radius: 5px;
 }
+
+.pagination {
+    display: inline-block;
+}
+
+    .pagination a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+    }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .pagination a {
+            transition: background-color .3s;
+        }
+
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+
+            .pagination a.active:hover {
+                background-color: #4CAF50 !important;
+            }

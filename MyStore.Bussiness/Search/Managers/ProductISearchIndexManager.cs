@@ -49,7 +49,7 @@ namespace MyStore.Business.Search.Managers
                     var pageCount = (int)Math.Ceiling(productManager.GetCount() / (double)batchSize);
                     for (var page = 0; page < pageCount; page++)
                     {
-                        var products = productManager.GetPageOrderedBy(ProductFields.Title, true, batchSize, page);
+                        var products = productManager.GetPageOrderedBy(ProductFields.Title, true, batchSize, page).Items;
                         searchProvider.AddOrUpdate(products);
                         indexProgress = (double)page / pageCount;
                     }

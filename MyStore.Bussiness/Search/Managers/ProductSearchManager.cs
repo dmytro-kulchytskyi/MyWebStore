@@ -28,7 +28,7 @@ namespace MyStore.Business.Search.Managers
             searchProvider = searchProviderFactory.GetProvider(directoryPath);
         }
 
-        public IEnumerable<Dictionary<string, string>> Search(SearchOptions searchOptions)
+        public ListSegment<SearchResult> Search(SearchOptions searchOptions)
         {
             return searchProvider.Search(searchOptions);
         }

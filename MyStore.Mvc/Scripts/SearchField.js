@@ -5,21 +5,33 @@
 
     var noResultsMessage = $(searchItems).html();
 
+    if ($(input).val()) {
+        loadDataToContainer(false);
+    }
+
+    function loadDataToContainer(showContainerAfterLoad) {
+        $.ajax({
+            method: "POST",
+            url: "/Product/Search",
+            data: { query: $(input).val() },
+        }).done(function (data) {
+            if (($(input).val() || "").trim()) {
+                $(searchItems).html(data || '');
+                if (showContainerAfterLoad) {
+                    $(searchItems).show();
+                }
+
+                if (!data || !data.length) {
+                    if (showContainerAfterLoad)
+                        $(searchItems).append($(noResultsMessage).show());
+                }
+            }
+        });
+    }
+
     $(input).on("propertychange keyup paste input", function () {
         if (($(this).val() || "").trim()) {
-            $.ajax({
-                method: "POST",
-                url: "/Product/Search",
-                data: { query: $(this).val() },
-            }).done(function (data) {
-                if (($(input).val() || "").trim()) {
-                    $(searchItems).html(data || '').show();
-
-                    if (!data || !data.length) {
-                        $(searchItems).append($(noResultsMessage).show());
-                    }
-                }
-            });
+            loadDataToContainer(true);
         }
         else {
             $(searchItems).hide();
@@ -30,7 +42,7 @@
         if (e.keyCode === 13) {
             var inputVal = $(this).val();
             if (inputVal)
-                window.location = '/SearchPage?' + $.param({ "Query": inputVal });
+                window.location = '/Products?' + $.param({ query: inputVal });
         }
     });
 

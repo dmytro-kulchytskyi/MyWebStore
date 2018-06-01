@@ -1,4 +1,5 @@
-﻿using MyStore.Business.Entities;
+﻿using MyStore.Business;
+using MyStore.Business.Entities;
 using MyStore.Business.Providers;
 using MyStore.Nhibarnate;
 using MyStore.Nhibernate.Wrappers.Factories;
@@ -100,12 +101,19 @@ namespace MyStore.Nhibarnate.Providers
             return instance;
         }
 
-        public virtual IList<T> GetPageOrderedBy(string fieldName, bool desc, int pageSize, int pageNumber)
+        public virtual ListSegment<T> GetPageOrderedBy(string fieldName, bool desc, int pageSize, int pageNumber)
         {
             return providerHelper.Invoke(s =>
             {
                 var query = s.QueryOver<T>().OrderBy(Projections.Property(fieldName));
-                return (desc ? query.Desc : query.Asc).Skip(pageNumber * pageSize).Take(pageSize).List();
+                var items = (desc ? query.Desc : query.Asc).Skip(pageNumber * pageSize).Take(pageSize).List();
+                var totalCount = s.QueryOver<T>().RowCount();
+
+                return new ListSegment<T>
+                {
+                    Items = items,
+                    TotalCount = totalCount
+                };
             });
         }
     }

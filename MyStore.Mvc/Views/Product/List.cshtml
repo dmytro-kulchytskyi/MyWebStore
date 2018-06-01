@@ -4,40 +4,65 @@
     ViewBag.Title = "All products";
 }
 
-<h2>All products</h2>
+@if (string.IsNullOrEmpty(Model.Query))
+{
+    <h2>All products</h2>
+}
+else
+{
+    ViewBag.SearchQuery = Model.Query;
+    <h2>Search results for «@Model.Query»</h2>
+    <p>Found: @Model.TotalItemsCount</p>
+}
 
 <hr />
 
 @using (Html.BeginForm("List", "Product", FormMethod.Post, new { @class = "productsSortBar", role = "form", id = "productListSortBar" }))
 {
+    @Html.HiddenFor(m => m.Query)
     @Html.DropDownListFor(m => m.OrderField, Model.AvailableOrderFields.Select(f => new SelectListItem
     {
         Value = f,
-        Text = f
+        Text = string.IsNullOrEmpty(f) ? "Relevant" : f
     }), new { @class = "productsSortBarInput" })
 
-    @Html.DropDownListFor(m => m.InverseOrder, new SelectListItem[] {
-new SelectListItem
-{
-Text = "Default",
-Value = false.ToString()
-},
-new SelectListItem
-{
-Text = "Inverse",
-Value = true.ToString()
-}
-}, new { @class = "productsSortBarInput" })
+    @Html.DropDownListFor(m => m.InverseOrder, new SelectListItem[]
+    {
+        new SelectListItem
+        {
+            Text = "Default",
+            Value = ""
+        },
+        new SelectListItem
+        {
+            Text = "Inverse",
+            Value = true.ToString()
+        }
+    }, new { @class = "productsSortBarInput" })
     <input type="submit" value="Sort" class="productsSortBarInput">
 }
 
 <hr />
 
 <div class="productsList" id="productsContainer">
-    @Html.Action("ProductsPage", Model)
+    @if (Model.Items.Count > 0)
+    {
+        foreach (var product in Model.Items)
+        {
+            @Html.Partial("ProductListItemPartial", product);
+        }
+    }
+    else
+    {
+        <h3>No results</h3>
+    }
 </div>
+
+<hr />
+
+@Html.Partial("ProductListPaging", Model)
 
 @section Scripts {
     @Scripts.Render("~/Scripts/ProductsListScroll.js")
-    @Scripts.Render("~/Scripts/ProductsSortBar.js");
+    @Scripts.Render("~/Scripts/ProductsSortBar.js")
 }

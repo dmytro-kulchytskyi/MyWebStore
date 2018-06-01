@@ -106,7 +106,7 @@ namespace MyStore.SearchProvider
         }
 
 
-        public IEnumerable<Dictionary<string, string>> Search(SearchOptions searchOptions)
+        public ListSegment<SearchResult> Search(SearchOptions searchOptions)
         {
             if (searchOptions == null)
                 throw new ArgumentNullException(nameof(searchOptions));
@@ -114,15 +114,15 @@ namespace MyStore.SearchProvider
             if (searchOptions.ResultFields == null || searchOptions.ResultFields.Count() == 0)
                 throw new ArgumentException($"{nameof(searchOptions.ResultFields)} required");
 
-            if (searchOptions.MaxResults < 0)
-                throw new ArgumentException($"{searchOptions.MaxResults} can't be negative");
+            if (searchOptions.PageSize < 0)
+                throw new ArgumentException($"{searchOptions.PageSize} can't be negative");
 
             var unstoredFields = searchOptions.ResultFields.Where(it => !StoredFields.Contains(it));
 
             if (unstoredFields.Count() > 0)
                 throw new InvalidOperationException("Some of the requested fields are unstored: " + string.Join(", ", unstoredFields));
 
-            IEnumerable<Dictionary<string, string>> results = new List<Dictionary<string, string>>();
+            ListSegment<SearchResult> results = new ListSegment<SearchResult>();
 
             if (string.IsNullOrEmpty(searchOptions.Query))
                 return results;
@@ -135,7 +135,7 @@ namespace MyStore.SearchProvider
 
             using (var searcher = new IndexSearcher(FSDirectory, true))
             {
-                var hitsLimit = searchOptions.MaxResults > 0 ? searchOptions.MaxResults : searchOptions.MaxResults;
+
                 var analyzer = GetAnalyzer();
 
                 QueryParser parser;
@@ -164,20 +164,38 @@ namespace MyStore.SearchProvider
                     sort = new Sort(new SortField(searchOptions.SortField, SortField.STRING, searchOptions.InverseOrder));
                 }
 
-                var hits = searcher.Search(query, null, hitsLimit, sort).ScoreDocs;
+                var pSize = searchOptions.PageSize;
+                var pNumber = searchOptions.PageNumber;
 
-                results = hits.Select(hit =>
+                var hitsLimit = (pNumber + 1) * pSize;
+
+                var docs = searcher.Search(query, null, hitsLimit, sort);
+
+                var totalHits = docs.TotalHits;
+
+                var hits = docs.ScoreDocs;
+
+                var resultFieldsArray = searchOptions.ResultFields.ToArray();
+
+                var items = new List<SearchResult>(searchOptions.PageSize);
+
+                var count = 0;
+                for (var i = pNumber * pSize; count < pSize; i++, count++)
                 {
-                    var doc = searcher.Doc(hit.Doc);
-                    var result = new Dictionary<string, string>(searchOptions.ResultFields.Count());
+                    if (i == totalHits)
+                        break;
 
-                    foreach (var key in searchOptions.ResultFields)
-                    {
+                    var doc = searcher.Doc(hits[i].Doc);
+                    var result = new Dictionary<string, string>(resultFieldsArray.Length);
+
+                    foreach (var key in resultFieldsArray)
                         result.Add(key, doc.Get(key));
-                    }
 
-                    return result;
-                }).ToList();
+                    items.Add(new SearchResult(result, resultFieldsArray));
+                }
+
+                results.Items = items;
+                results.TotalCount = totalHits;
 
                 analyzer.Dispose();
             }

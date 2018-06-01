@@ -8,13 +8,14 @@ namespace MyStore.Business.Search
 {
     public class SearchOptions
     {
-        //string searchQuery, IEnumerable<string> resultFields, int maxResults = 0, string sortField = null, bool orderByDesc = false, IEnumerable<string> searchFields = null
         public string Query { get; set; }
 
+        public int PageSize { get; set; }
+
+        public int PageNumber { get; set; }
+
         public IEnumerable<string> ResultFields { get; set; }
-
-        public int MaxResults { get; set; }
-
+        
         public string SortField { get; set; }
 
         public bool InverseOrder { get; set; }

@@ -1,4 +1,5 @@
 ﻿
+using MyStore.Business;
 using MyStore.Business.Entities;
 using MyStore.Business.Providers;
 using MyStore.Nhibernate.Wrappers.Factories;
@@ -32,5 +33,6 @@ namespace MyStore.Nhibarnate.Providers
                 return query.OrderBy(Projections.Property(fieldName)).Desc.Take(count).List();
             });
         }
+
     }
 }

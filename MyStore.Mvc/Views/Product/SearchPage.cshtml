@@ -8,8 +8,8 @@
 <hr />
 @using (Html.BeginForm("SearchPage", "Product", FormMethod.Post, new { @class = "productsSortBar", role = "form", id = "productListSortBar" }))
 {
-    @Html.ValidationMessageFor(m => m.Query, "", new { @class = "text-danger" })
-    @Html.TextBoxFor(m => m.Query, new { @class = "productsSortBarInput" })
+    @Html.ValidationMessageFor(m => m.SearchQuery, "", new { @class = "text-danger" })
+    @Html.TextBoxFor(m => m.SearchQuery, new { @class = "productsSortBarInput" })
     @Html.DropDownListFor(m => m.OrderField, Model.AvailableOrderFields.Select(f => new SelectListItem
     {
         Value = f,

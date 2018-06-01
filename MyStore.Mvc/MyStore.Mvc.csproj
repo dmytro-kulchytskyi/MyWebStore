@@ -252,6 +252,8 @@
     <Compile Include="Models\ProductViewModels\ProductListItemViewModel.cs" />
     <Compile Include="Models\ProductViewModels\ProductSearchListViewModel.cs" />
     <Compile Include="Models\ProductViewModels\ProductsListViewModel.cs" />
+    <Compile Include="PagedList.cs" />
+    <Compile Include="ProductsListViewModelBinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestDataStorage.cs" />
     <Compile Include="Startup.cs" />
@@ -289,6 +291,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\SearchField.js" />
+    <None Include="Views\Product\ProductListPaging.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

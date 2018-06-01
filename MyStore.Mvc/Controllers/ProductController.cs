@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MyStore.Business;
+using MyStore.Business.Entities;
 using MyStore.Business.Managers;
 using MyStore.Business.Search;
 using MyStore.Business.Search.Managers;
@@ -28,20 +29,55 @@ namespace MyStore.Mvc.Controllers
         }
 
         [HttpGet]
-        public ActionResult List(ProductsListViewModel model)
+        public ActionResult List([ModelBinder(typeof(ProductsListViewModelBinder))] ProductsListViewModel model)
         {
-            model.AvailableOrderFields = AppConfiguration.AvailableProductSortFields;
+            var availableOrderFields = AppConfiguration.AvailableProductSortFields.ToList();
 
-            if (string.IsNullOrEmpty(model.OrderField))
-                model.OrderField = AppConfiguration.DefaulOrderField;
+            model.PageNumber = model.PageNumber <= 0 ? 0 : model.PageNumber;
+            model.PageSize = model.PageSize <= 0 ? AppConfiguration.DefaultPageSize : model.PageSize;
+        
+            IList<ProductListItemViewModel> products;
 
-            if (!model.AvailableOrderFields.Contains(model.OrderField))
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (!string.IsNullOrEmpty(model.Query))
+            {
+                availableOrderFields.Insert(0, "");
+
+                var searchResults = productSearchManager.Search(new SearchOptions
+                {
+                    Query = model.Query,
+                    PageNumber = model.PageNumber,
+                    ResultFields = ProductFields.AllExcept(ProductFields.Description),
+                    PageSize = model.PageSize,
+                    InverseOrder = model.InverseOrder,
+                    SortField = model.OrderField
+                });
+                model.DefaultOrderField = "";
+                model.TotalItemsCount = searchResults.TotalCount;
+                products = Mapper.Map<IList<ProductListItemViewModel>>(searchResults.Items);
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(model.OrderField))
+                    model.OrderField = AppConfiguration.DefaulOrderField;
+
+
+                var results = productManager.GetPageOrderedBy(
+                    model.OrderField,
+                    model.InverseOrder,
+                    model.PageSize,
+                    model.PageNumber);
+
+                model.DefaultOrderField = AppConfiguration.DefaulOrderField;
+                model.TotalItemsCount = results.TotalCount;
+                products = Mapper.Map<IList<ProductListItemViewModel>>(results.Items);
+            }
+
+            model.AvailableOrderFields = availableOrderFields.ToArray();
+            model.Items = products;
 
             return View(model);
         }
 
-        
         public ActionResult ProductsPage(ProductsListViewModel model)
         {
             if (!Request.IsAjaxRequest() && !ControllerContext.IsChildAction)
@@ -75,8 +111,6 @@ namespace MyStore.Mvc.Controllers
         [HttpGet]
         public ActionResult Details(string id, string returnUrl)
         {
-            var url = Request.Url;
-
             if (string.IsNullOrEmpty(id))
                 return HttpNotFound();
 
@@ -102,37 +136,12 @@ namespace MyStore.Mvc.Controllers
             {
                 Query = query,
                 ResultFields = ProductFields.AllExcept(ProductFields.Description),
-                MaxResults = AppConfiguration.SearchResultsCount
+                PageSize = AppConfiguration.SearchResultsCount
             });
 
-            var model = Mapper.Map<IEnumerable<ProductListItemViewModel>>(products);
+            var model = Mapper.Map<IEnumerable<ProductListItemViewModel>>(products.Items);
             return PartialView("SearchResultsPartial", model);
         }
 
-        [HttpGet]
-        public ActionResult SearchPage(ProductSearchListViewModel model)
-        {
-            if (string.IsNullOrEmpty(model.Query))
-                return RedirectToAction("List");
-
-            var availableOrderFields = AppConfiguration.AvailableProductSortFields.ToList();
-            availableOrderFields.Insert(0, "");
-
-            model.AvailableOrderFields = availableOrderFields.ToArray();
-
-            model.ResultsCount = model.ResultsCount != 0 ? model.ResultsCount : AppConfiguration.SearchPageMaxItemCount;
-
-            var products = productSearchManager.Search(new SearchOptions
-            {
-                Query = model.Query,
-                ResultFields = ProductFields.AllExcept(ProductFields.Description),
-                MaxResults = model.ResultsCount,
-                InverseOrder = model.InverseOrder,
-                SortField = model.OrderField,
-                SearchFields = model.SearchFields
-            });
-            model.Items = Mapper.Map<IList<ProductListItemViewModel>>(products);
-            return View(model);
-        }
     }
 }

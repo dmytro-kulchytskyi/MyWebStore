@@ -12,7 +12,7 @@ namespace MyStore.Business.Search
        where T : IEntity
     {
         DirectoryInfo WorkDirectory { get; }
-        IEnumerable<Dictionary<string, string>> Search(SearchOptions searchOption);
+        ListSegment<SearchResult> Search(SearchOptions searchOption);
         void AddOrUpdate(T entity);
         void AddOrUpdate(IEnumerable<T> entities);
         void Optimize();

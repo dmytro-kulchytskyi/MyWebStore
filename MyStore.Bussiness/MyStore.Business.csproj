@@ -52,6 +52,7 @@
     <Compile Include="Entities\Order.cs" />
     <Compile Include="Entities\Product.cs" />
     <Compile Include="IRequestDataStorage.cs" />
+    <Compile Include="ListSegment.cs" />
     <Compile Include="Managers\AddressManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\ProductManager.cs" />
@@ -61,16 +62,15 @@
     <Compile Include="Providers\IProductProvider.cs" />
     <Compile Include="Providers\IProvider.cs" />
     <Compile Include="Providers\IUserProvider.cs" />
-    <Compile Include="Search\ISearchProvider.cs" />
-    <Compile Include="Search\ISearchProviderFactory.cs" />
+    <Compile Include="Search\Provider\ISearchProvider.cs" />
+    <Compile Include="Search\Provider\ISearchProviderFactory.cs" />
     <Compile Include="Search\Managers\IndexStatus.cs" />
     <Compile Include="Search\Managers\ProductISearchIndexManager.cs" />
     <Compile Include="ProductFields.cs" />
     <Compile Include="Search\Managers\ProductSearchManager.cs" />
     <Compile Include="Search\SearchOptions.cs" />
+    <Compile Include="Search\SearchResult.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Search\Provider\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

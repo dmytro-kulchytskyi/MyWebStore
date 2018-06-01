@@ -15,11 +15,13 @@ namespace MyStore.Nhibarnate
     public class NhibenateSessionFactoryConfigurator
     {
         private static readonly Lazy<ISessionFactory> sessionFactory = new Lazy<ISessionFactory>(() =>
-                Fluently.Configure().Database(MsSqlConfiguration.MsSql2008.ConnectionString(ConfigurationManager.ConnectionStrings["DB"].ConnectionString).ShowSql())
+                Fluently.Configure().Database(MsSqlConfiguration.MsSql2008.ConnectionString(
+                    ConfigurationManager.ConnectionStrings["Connection"].ConnectionString).ShowSql())
+
                     .Mappings(m => m.FluentMappings.AddFromAssemblyOf<NhibenateSessionFactoryConfigurator>())
                     .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(true, true))
                     .BuildSessionFactory(),
-            LazyThreadSafetyMode.PublicationOnly);
+            LazyThreadSafetyMode.ExecutionAndPublication);
 
         public static ISessionFactory SessionFactory => sessionFactory.Value;
     }

@@ -15,9 +15,11 @@ namespace MyStore
 
             routes.MapRoute(
                name: "ProductsList",
-               url: "Products",
-               defaults: new { controller = "Product", action = "List" }
+               url: "Products/{pageNumber}",
+               defaults: new { controller = "Product", action = "List", pageNumber = 1 },
+               constraints: new { pageNumber = @"\d+" }
             );
+
 
             routes.MapRoute(
                name: "ProductDetails",
@@ -25,13 +27,7 @@ namespace MyStore
                defaults: new { controller = "Product", action = "Details" },
                constraints: new { link = @"[A-Za-zА-Яа-яі0-9\-]+", id = @"[A-Za-zА-Яа-яі0-9\-]+" }
             );
-
-            routes.MapRoute(
-                name: "SearchPage",
-                url: "SearchPage/{query}",
-                defaults: new { controller = "Product", action = "SearchPage", query = UrlParameter.Optional }
-            );
-
+            
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
