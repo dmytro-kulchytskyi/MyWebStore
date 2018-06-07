@@ -1,5 +1,7 @@
-﻿using MyStore.Mvc.App_Start.Unity;
+﻿using MyStore.Mvc;
+using MyStore.Mvc.App_Start.Unity;
 using MyStore.Mvc.EntityMapper;
+using MyStore.Mvc.Models.ProductViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,8 @@ namespace MyStore
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             MvcDependencyResolverConfig.ConfigureDependencyResolver(UnityConfig.Container);
+
+            ModelBinders.Binders.Add(typeof(ProductsListViewModel), new ProductsListViewModelBinder());
 
             MapperConfig.Initialize();
         }

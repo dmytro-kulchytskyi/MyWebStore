@@ -22,7 +22,8 @@ namespace MyStore.Lucene
         protected override string[] DefaultSearchFields => new string[]
         {
             ProductFields.Title,
-            ProductFields.Description,
+            ProductFields.Id,
+            ProductFields.Description
         };
 
         protected override string[] StoredFields => ProductFields.AllExcept(ProductFields.Description);

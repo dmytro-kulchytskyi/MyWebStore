@@ -27,11 +27,13 @@ textarea {
     flex-wrap: wrap;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 }
 
 .productsListItem {
+    margin-right: 12px;
+    margin-left: 12px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -48,11 +50,10 @@ textarea {
         background-color: ghostwhite;
     }
 
- 
 
-        .productsListItem.notInStock a {
-            color: dimgray;
-        }
+    .productsListItem.notInStock a {
+        color: dimgray;
+    }
 
 .btn.add-to-basket:disabled,
 .btn.add-to-basket[disabled] {
@@ -62,14 +63,21 @@ textarea {
 }
 
 .searchField {
-    float: left;
+    display: inline-block;
     margin: 8px;
     margin-left: 10px;
-    width: 280px;
+    width: 350px;
+    max-width: 90%;
 }
 
+    .searchField input[type=text] {
+        max-width: 100% !important;
+    }
+
+
 .searchItemsContainer {
-    width: 280px;
+    z-index: 999;
+    width: 350px;
     position: fixed;
     background-color: white;
     color: black;
@@ -83,35 +91,54 @@ textarea {
     color: black;
 }
 
-.productSerachItem {
+.productSearchItem {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: space-around;
     align-items: center;
     color: black;
     border-top: 1px solid #f2f2f2;
 }
 
-.productSerachItem:hover {
-   background-color: ghostwhite;
+.productSearchItem:hover {
+    background-color: ghostwhite;
 }
 
-    .productSerachItem img {
-        height: 40px;
-        width: 40px;
-        margin: 10px;
-    }
+.itemImageContainer {
+    display: flex;
+    width: 68px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 8px 0 8px;
+}
 
-    .productSerachItem .productSerachItemInfo {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        width: 50%;
-    }
+.productSearchItem img {
+    max-height: 50px;
+    max-width: 60px;
+}
+
+.productSearchItem .productSearchItemInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 250px;
+    height: 48px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.productSearchItemTitle {
+    white-space: nowrap;
+    font-size: 12pt;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: break-word;
+}
 
 .productsSortBar {
     display: flex;
-    width: 600px;
+    flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
     flex-direction: row;
@@ -121,6 +148,10 @@ textarea {
         margin: 3px;
         margin-right: 8px;
         border-radius: 3px;
+        box-sizing: border-box;
+        border-radius: 4px;
+        border: 1px solid #dddde0;
+        box-shadow: inset 2px 3px 0 0 #f2f2f3;
     }
 
 .productsSort input[type=submit] {
@@ -143,14 +174,14 @@ textarea {
             color: white;
         }
 
-        .pagination a {
-            transition: background-color .3s;
-        }
+    .pagination a {
+        transition: background-color .3s;
+    }
 
         .pagination a:hover {
             background-color: #ddd;
         }
 
-            .pagination a.active:hover {
-                background-color: #4CAF50 !important;
-            }
+        .pagination a.active:hover {
+            background-color: #4CAF50 !important;
+        }

@@ -20,6 +20,13 @@ namespace MyStore
                constraints: new { pageNumber = @"\d+" }
             );
 
+            routes.MapRoute(
+            name: "SearchPage",
+            url: "SearchPage/{pageNumber}",
+            defaults: new { controller = "Product", action = "SearchPage", pageNumber = 1 },
+            constraints: new { pageNumber = @"\d+" }
+         );
+
 
             routes.MapRoute(
                name: "ProductDetails",

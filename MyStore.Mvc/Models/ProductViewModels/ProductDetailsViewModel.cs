@@ -21,6 +21,7 @@ namespace MyStore.Mvc.Models.ProductViewModels
         public string Description { get; set; }
 
         [Display(Name = "Price")]
+        [DataType(DataType.Currency)]
         public double Price { get; set; }
 
         [Display(Name = "Selling Count")]

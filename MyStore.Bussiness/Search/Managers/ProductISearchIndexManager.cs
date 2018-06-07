@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MyStore.Business.Entities;
+using MyStore.Business.Managers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MyStore.Business.Search.Managers
 {
-    public partial class ProductSearchManager
+    public class ProductISearchIndexManager
     {
         private static readonly object reindexndexLock = new object();
 
@@ -17,18 +19,33 @@ namespace MyStore.Business.Search.Managers
 
         private static string indexError;
 
+        private readonly ProductManager productManager;
+
+        private readonly ProductSearchManager productSearchManager;
+
+        private readonly ISearchProviderFactory<Product> searchProviderFactory;
+
         public IndexStatus IndexStatus => indexStatus;
 
         public double IndexProgress => indexProgress;
 
         public string IndexError => indexError;
 
+        public ProductISearchIndexManager(ProductManager productManager,
+                                          ProductSearchManager productSearchManager,
+                                          ISearchProviderFactory<Product> searchProviderFactory)
+        {
+            this.searchProviderFactory = searchProviderFactory;
+            this.productManager = productManager;
+            this.productSearchManager = productSearchManager;
+        }
+
         public void CreateSearchIndex()
         {
             lock (reindexndexLock)
             {
                 if (indexStatus == IndexStatus.InProgress)
-                    throw new InvalidOperationException("Already indexing");
+                    throw new InvalidOperationException("Indexation task already in progress");
 
                 indexStatus = IndexStatus.InProgress;
                 indexProgress = 0;
@@ -49,32 +66,27 @@ namespace MyStore.Business.Search.Managers
                     var pageCount = (int)Math.Ceiling(productManager.GetCount() / (double)batchSize);
                     for (var page = 0; page < pageCount; page++)
                     {
-                        var products = productManager.GetPageOrderedBy(ProductFields.Title, true, batchSize, page).Items;
+                        var products = productManager.GetPageOrderedBy(ProductFields.Title, false, batchSize, page).Items;
                         searchProvider.AddOrUpdate(products);
                         indexProgress = (double)page / pageCount;
                     }
 
                     searchProvider.Optimize();
 
-                    if (Directory.Exists(directoryPath))
-                        new DirectoryInfo(directoryPath).Delete(true);
+                    var path = productSearchManager.DirectoryPath;
 
-                    tempDir.MoveTo(directoryPath);
+                    if (Directory.Exists(path))
+                        new DirectoryInfo(path).Delete(true);
+
+                    tempDir.MoveTo(path);
+
+                    indexStatus = IndexStatus.Success;
                 }
                 catch (Exception e)
                 {
-                    lock (reindexndexLock)
-                    {
-                        indexStatus = IndexStatus.Failed;
-                        indexError = e.Message;
-                    }
-
-                    return;
+                    indexStatus = IndexStatus.Failed;
+                    indexError = e.Message;
                 }
-
-                lock (reindexndexLock)
-                    indexStatus = IndexStatus.Success;
-
             });
         }
     }

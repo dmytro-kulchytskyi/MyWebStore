@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyStore.Nhibarnate.Providers
 {
-    public class UserProvider : Provider<AppUser>, IUserProvider
+    public class UserProvider : BusinessEntityProvider<AppUser>, IUserProvider
     {
         public UserProvider(SessionWrapperFactory sessionWrapperFactory, TransactionWrapperFactory transactionWrapperFactory)
             : base(sessionWrapperFactory, transactionWrapperFactory)

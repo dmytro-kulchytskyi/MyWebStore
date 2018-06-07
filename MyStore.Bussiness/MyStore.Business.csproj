@@ -49,9 +49,9 @@
     <Compile Include="Entities\AppUser.cs" />
     <Compile Include="Entities\Country.cs" />
     <Compile Include="Entities\IEntity.cs" />
-    <Compile Include="Entities\Order.cs" />
     <Compile Include="Entities\Product.cs" />
     <Compile Include="IRequestDataStorage.cs" />
+    <Compile Include="IСurrencyProvider.cs" />
     <Compile Include="ListSegment.cs" />
     <Compile Include="Managers\AddressManager.cs" />
     <Compile Include="Managers\Manager.cs" />
@@ -62,12 +62,14 @@
     <Compile Include="Providers\IProductProvider.cs" />
     <Compile Include="Providers\IProvider.cs" />
     <Compile Include="Providers\IUserProvider.cs" />
+    <Compile Include="Search\ISearchIndexInfoProvider.cs" />
     <Compile Include="Search\Provider\ISearchProvider.cs" />
     <Compile Include="Search\Provider\ISearchProviderFactory.cs" />
-    <Compile Include="Search\Managers\IndexStatus.cs" />
+    <Compile Include="Search\IndexStatus.cs" />
     <Compile Include="Search\Managers\ProductISearchIndexManager.cs" />
     <Compile Include="ProductFields.cs" />
     <Compile Include="Search\Managers\ProductSearchManager.cs" />
+    <Compile Include="Search\SearchIndexInfo.cs" />
     <Compile Include="Search\SearchOptions.cs" />
     <Compile Include="Search\SearchResult.cs" />
   </ItemGroup>

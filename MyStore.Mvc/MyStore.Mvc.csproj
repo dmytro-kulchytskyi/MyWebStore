@@ -232,6 +232,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="CustomHtmlHelpers\TextPreviewHtmlHelper.cs" />
     <Compile Include="EntityMapper\MapperConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -253,6 +254,7 @@
     <Compile Include="Models\ProductViewModels\ProductSearchListViewModel.cs" />
     <Compile Include="Models\ProductViewModels\ProductsListViewModel.cs" />
     <Compile Include="PagedList.cs" />
+    <Compile Include="CustomHtmlHelpers\PriceFormatHtmlHelper.cs" />
     <Compile Include="ProductsListViewModelBinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestDataStorage.cs" />
@@ -262,7 +264,55 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\123.jpg" />
+    <Content Include="Content\Images\2065812_images_1614125209.jpg" />
+    <Content Include="Content\Images\2490362_images_1669549823.jpg" />
+    <Content Include="Content\Images\26146857_images_2338147841.jpg" />
+    <Content Include="Content\Images\31131439_images_2697513031.jpg" />
+    <Content Include="Content\Images\38418352_images_4700401800.jpg" />
+    <Content Include="Content\Images\41664776_images_4726522640.jpg" />
+    <Content Include="Content\Images\41847632_images_4701377872.jpg" />
+    <Content Include="Content\Images\42481152_images_4721533256.jpg" />
+    <Content Include="Content\Images\42511184_images_4728261384.jpg" />
+    <Content Include="Content\Images\5489739_images_1335998199.jpg" />
+    <Content Include="Content\Images\asus_rog_strix_gtx1060_6g_gaming_images_1676041763.jpg" />
+    <Content Include="Content\Images\asus_rog_strix_gtx1070_o8g_gaming_images_1636905330.jpg" />
+    <Content Include="Content\Images\bacardi_5010677035811_images_1355069511.jpg" />
+    <Content Include="Content\Images\beats_ml9d2zm_a_images_1794233534.jpg" />
+    <Content Include="Content\Images\bi_es_5907699488575_images_3262270471.jpg" />
+    <Content Include="Content\Images\copy_impression_imsmart_c551_594151bd7163d_images_2047141512.jpg" />
+    <Content Include="Content\Images\copy_lenovo_pa4n0006ua_57fcd2701861f_images_1758024794.jpg" />
+    <Content Include="Content\Images\copy_metabo_600671510_56ebf59750c50_images_1487893858.jpg" />
+    <Content Include="Content\Images\copy_nike_454477_103_12c_58af0204e35d6_images_1867564922.jpg" />
+    <Content Include="Content\Images\copy_xiaomi_mi_band_original_black_1151300018_58086846c46d4_images_1768231704.jpg" />
+    <Content Include="Content\Images\dolphin_8680131204038_images_4731568864.jpg" />
+    <Content Include="Content\Images\electrolux_ehda_w2500_images_1741912820.jpg" />
+    <Content Include="Content\Images\hennessy.jpg" />
+    <Content Include="Content\Images\huawei_p20_lite_4_64gb_blue_images_4627060048.jpg" />
+    <Content Include="Content\Images\jack_daniels_5099873045855_images_2262053871.jpg" />
+    <Content Include="Content\Images\jagermeister_40677000155322_images_3282916255.jpg" />
+    <Content Include="Content\Images\jim_beam_5060045585714_images_4230974800.jpg" />
+    <Content Include="Content\Images\kronenbourg.jpg" />
+    <Content Include="Content\Images\laptop1.jpg" />
+    <Content Include="Content\Images\laptop2.jpg" />
+    <Content Include="Content\Images\lego_42059_images_1794636118.jpg" />
+    <Content Include="Content\Images\maxcity_gloss_blue_images_3775135416.jpg" />
+    <Content Include="Content\Images\nike_887225100537_images_2405758657.jpg" />
+    <Content Include="Content\Images\qualcomm_qc_008bl_images_2098580890.jpg" />
+    <Content Include="Content\Images\regal_r25026_f_images_1115126017.jpg" />
+    <Content Include="Content\Images\regal_r_2456210_p_rf_images_1073788944.jpg" />
+    <Content Include="Content\Images\reni_roz6205018596_images_3928208688.jpg" />
+    <Content Include="Content\Images\roca_a220270001_images_4499424816.jpg" />
+    <Content Include="Content\Images\samsung_galaxy_a8_2018_black_images_2429891193.jpg" />
+    <Content Include="Content\Images\sofia_s_5_images_9664332.jpg" />
     <Content Include="Content\Images\test.jpg" />
+    <Content Include="Content\Images\twins_5900006613011_images_2071795355.jpg" />
+    <Content Include="Content\Images\xiaomi_mi_band_2_original_red_images_1708600688.jpg" />
+    <Content Include="Content\Images\xiaomi_mi_band_2_purple_images_1884742916.jpg" />
+    <Content Include="Content\Images\xiaomi_mi_power_bank_10000_ndy_02_images_766239530.jpg" />
+    <Content Include="Content\Images\xiaomi_vxn4220gl_images_3550302687.jpg" />
+    <Content Include="Content\Images\xprinter_xp_370b_images_1884720158.jpg" />
+    <Content Include="Content\Images\ziz_45003_images_4688437896.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -291,7 +341,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\SearchField.js" />
-    <None Include="Views\Product\ProductListPaging.cshtml" />
+    <Content Include="Views\Admin\_ViewStart.cshtml" />
+    <Content Include="Views\Account\_ViewStart.cshtml" />
+    <None Include="Views\Product\_ProductListPaging.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -318,16 +370,16 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Product\List.cshtml" />
-    <Content Include="Views\Product\ProductListItemPartial.cshtml" />
-    <Content Include="Views\Product\ProductsPagePartial.cshtml" />
-    <Content Include="Views\Product\TopProductsPartial.cshtml" />
+    <Content Include="Views\Product\_ProductListItem.cshtml" />
+    <Content Include="Views\Product\_ProductsPage.cshtml" />
+    <Content Include="Views\Product\_TopProducts.cshtml" />
     <Content Include="Views\Product\Details.cshtml" />
     <Content Include="Views\Shared\SearchFieldPartial.cshtml" />
-    <Content Include="Views\Product\SearchResultsPartial.cshtml" />
+    <Content Include="Views\Product\_SearchResults.cshtml" />
     <Content Include="Views\Admin\CreateSearchIndex.cshtml" />
-    <Content Include="Views\Product\SearchPage.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\SearchSettings.cshtml" />
+    <Content Include="Views\Shared\_LayoutSimple.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

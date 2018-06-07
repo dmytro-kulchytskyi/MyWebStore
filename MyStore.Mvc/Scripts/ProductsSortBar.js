@@ -5,19 +5,21 @@
 
     var $inverseOrderInput = $($productListSortBar).find('select[name=InverseOrder]').first();
 
+    var $inverseOrderFieldConatiner = $('#inverseOrderField');
+
     if ($($orderFieldSelect).val()) {
-        $($inverseOrderInput).show();
+        $($inverseOrderFieldConatiner).show();
     }
     else {
-        $($inverseOrderInput).hide();
+        $($inverseOrderFieldConatiner).hide();
     }
 
     $($orderFieldSelect).on('change', function () {
         if ($(this).val()) {
-            $($inverseOrderInput).show();
+            $($inverseOrderFieldConatiner).show();
         }
         else {
-            $($inverseOrderInput).hide();
+            $($inverseOrderFieldConatiner).hide();
         }
     });
 
@@ -29,6 +31,8 @@
             if (field.value.toString())
                 params[field.name] = field.value;
         });
+
+        params.pageNumber = 1;
 
         window.location = $(this).attr('action') + '?' + $.param(params);
     })

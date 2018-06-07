@@ -11,8 +11,16 @@ namespace MyStore.Mvc
     {
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
+            
+
             var result = (ProductsListViewModel)base.BindModel(controllerContext, bindingContext);
             result.PageNumber--;
+
+            if (result.PageNumber < 0)
+                result.PageNumber = 0;
+
+            result.PageSize = AppConfiguration.DefaultPageSize;
+
             return result;
         }
     }

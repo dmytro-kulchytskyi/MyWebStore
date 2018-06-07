@@ -3,53 +3,61 @@
 @{
     ViewBag.Title = "All products";
 }
-
-@if (string.IsNullOrEmpty(Model.Query))
-{
-    <h2>All products</h2>
-}
-else
-{
-    ViewBag.SearchQuery = Model.Query;
-    <h2>Search results for «@Model.Query»</h2>
-    <p>Found: @Model.TotalItemsCount</p>
-}
-
+<div style="margin-left: 25px;">
+    @if (string.IsNullOrEmpty(Model.Query))
+    {
+        <h2>All products</h2>
+    }
+    else
+    {
+        ViewBag.SearchQuery = Model.Query;
+        <h2>Search results for «@Model.Query»</h2>
+        <p>Found: @Model.TotalItemsCount</p>
+    }
+</div>
 <hr />
-
-@using (Html.BeginForm("List", "Product", FormMethod.Post, new { @class = "productsSortBar", role = "form", id = "productListSortBar" }))
-{
-    @Html.HiddenFor(m => m.Query)
-    @Html.DropDownListFor(m => m.OrderField, Model.AvailableOrderFields.Select(f => new SelectListItem
+<div style="margin-left: 25px;">
+    <h4>Sort</h4>
+    @using (Html.BeginForm("List", "Product", new { pageNumber = 1 }, FormMethod.Post, new { @class = "productsSortBar", role = "form", id = "productListSortBar" }))
     {
-        Value = f,
-        Text = string.IsNullOrEmpty(f) ? "Relevant" : f
-    }), new { @class = "productsSortBarInput" })
-
-    @Html.DropDownListFor(m => m.InverseOrder, new SelectListItem[]
-    {
-        new SelectListItem
-        {
-            Text = "Default",
-            Value = ""
-        },
-        new SelectListItem
-        {
-            Text = "Inverse",
-            Value = true.ToString()
-        }
-    }, new { @class = "productsSortBarInput" })
-    <input type="submit" value="Sort" class="productsSortBarInput">
-}
-
+        @Html.HiddenFor(m => m.Query)
+        <div>
+            @Html.DisplayNameFor(m => m.OrderField)
+            @Html.HiddenFor(m => m.OrderField)
+            @Html.DropDownListFor(m => m.OrderField, Model.AvailableOrderFields.Select(f => new SelectListItem
+            {
+                Value = f,
+                Text = string.IsNullOrEmpty(f) ? "Relevant" : f
+            }), new { @class = "productsSortBarInput" })
+        </div>
+        <div id="inverseOrderField">
+            @Html.DisplayNameFor(m => m.InverseOrder)
+            @Html.HiddenFor(m => m.InverseOrder)
+            @Html.DropDownListFor(m => m.InverseOrder, new SelectListItem[]
+            {
+                new SelectListItem
+                {
+                    Text = "Default",
+                    Value = ""
+                },
+                new SelectListItem
+                {
+                    Text = "Inverse",
+                    Value = true.ToString()
+                }
+            }, new { @class = "productsSortBarInput" })
+        </div>
+        <input type="submit" value="Sort" class="btn btn-sm btn-success">
+    }
+</div>
 <hr />
 
 <div class="productsList" id="productsContainer">
-    @if (Model.Items.Count > 0)
+    @if (Model.Items != null && Model.Items.Count > 0)
     {
         foreach (var product in Model.Items)
         {
-            @Html.Partial("ProductListItemPartial", product);
+            @Html.Partial("_ProductListItem", product);
         }
     }
     else
@@ -60,9 +68,8 @@ else
 
 <hr />
 
-@Html.Partial("ProductListPaging", Model)
+@Html.Partial("_ProductListPaging", Model)
 
 @section Scripts {
-    @Scripts.Render("~/Scripts/ProductsListScroll.js")
     @Scripts.Render("~/Scripts/ProductsSortBar.js")
 }

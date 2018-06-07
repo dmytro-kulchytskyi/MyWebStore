@@ -15,6 +15,7 @@ using MyStore.Business.Managers;
 using MyStore.Mvc.Models.AccountViewModels;
 using System.Collections.Generic;
 using AutoMapper;
+using System.Net;
 
 namespace MyStore.Controllers
 {
@@ -51,7 +52,7 @@ namespace MyStore.Controllers
         public ActionResult Login(string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
 
             ViewBag.ReturnUrl = returnUrl;
             return View();
@@ -136,7 +137,7 @@ namespace MyStore.Controllers
         public ActionResult Register()
         {
             if (User.Identity.IsAuthenticated)
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
 
             var model = new RegisterViewModel()
             {

@@ -1,0 +1,25 @@
+﻿@model IEnumerable<MyStore.Mvc.Models.ProductViewModels.ProductListItemViewModel>
+@foreach (var product in Model)
+{
+    <div class="productSearchItem">
+
+        <div class="itemImageContainer">
+            <img src="~/Content/Images/@product.Image">
+        </div>
+        <div class="productSearchItemInfo">
+
+            <a href="@Url.Action("Details", "Product", new
+                {
+                    Link = product.Url,
+                    Id = product.Id,
+                    ReturnUrl = (Request.IsAjaxRequest() ? Request.UrlReferrer : Request.Url).PathAndQuery
+                })">
+                <p class="productSearchItemTitle">
+                    @Html.DisplayFor(m => product.Title)
+                </p>
+            </a>
+
+            <p style="margin: 0;">@Html.DisplayNameFor(m => m.Price): @Html.PriceFormat(product.Price)</p>
+        </div>
+    </div>
+}

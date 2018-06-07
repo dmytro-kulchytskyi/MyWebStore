@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web;
+using System.Web.Mvc;
 
 namespace MyStore.Mvc.Models.ProductViewModels
 {
@@ -20,10 +23,10 @@ namespace MyStore.Mvc.Models.ProductViewModels
         [ScaffoldColumn(false)]
         public int TotalItemsCount { get; set; }
 
-        [Display(Name = "Order Field")]
+        [Display(Name = "Order by:")]
         public string OrderField { get; set; }
 
-        [Display(Name = "Order type")]
+        [Display(Name = "Order type:")]
         public bool InverseOrder { get; set; }
 
         [ScaffoldColumn(false)]

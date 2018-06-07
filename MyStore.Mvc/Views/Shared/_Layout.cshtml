@@ -18,10 +18,11 @@
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("MyStore", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("All products", "List", "Product", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.Partial("SearchFieldPartial")
+                @Html.ActionLink("All products", "List", "Product", new { pageNumber = 1 }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
+                @Html.Partial("SearchFieldPartial")
+
                 @Html.Partial("_LoginPartial")
 
                 @if (User.IsInRole("Admin"))
@@ -32,6 +33,8 @@
                         </li>
                     </ul>
                 }
+
+
             </div>
         </div>
     </div>

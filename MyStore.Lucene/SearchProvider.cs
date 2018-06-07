@@ -24,8 +24,6 @@ namespace MyStore.SearchProvider
     {
         protected readonly Version luceneVersion = Version.LUCENE_30;
 
-        protected readonly int searchResultsDefaultLimit = Configuration.SearchResultsDefaultLimit;
-
         public SearchProvider(DirectoryInfo directory)
         {
             WorkDirectory = directory;
@@ -44,7 +42,7 @@ namespace MyStore.SearchProvider
             return new StandardAnalyzer(luceneVersion);
         }
 
-        protected FSDirectory FSDirectory
+        protected FSDirectory Directory
         {
             get
             {
@@ -54,37 +52,15 @@ namespace MyStore.SearchProvider
                 if (!WorkDirectory.Exists)
                     WorkDirectory.Create();
 
-                var directory = FSDirectory.Open(WorkDirectory);
-
-                if (IndexWriter.IsLocked(directory))
-                    IndexWriter.Unlock(directory);
-
-                var lockFilePath = Path.Combine(WorkDirectory.FullName, "write.lock");
-
-                if (File.Exists(lockFilePath))
-                    File.Delete(lockFilePath);
-
-                return directory;
+                return FSDirectory.Open(WorkDirectory);
             }
         }
 
         protected IndexWriter GetIndexWriter()
         {
-            return new IndexWriter(FSDirectory, GetAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
+            return new IndexWriter(Directory, GetAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
         }
-
-        protected Query ParseQuery(string searchQuery, QueryParser parser)
-        {
-            try
-            {
-                return parser.Parse(searchQuery.Trim());
-            }
-            catch (ParseException)
-            {
-                return parser.Parse(QueryParser.Escape(searchQuery.Trim()));
-            }
-        }
-
+        
         public void AddOrUpdate(IEnumerable<T> instances)
         {
             using (var writer = GetIndexWriter())
@@ -104,7 +80,6 @@ namespace MyStore.SearchProvider
         {
             AddOrUpdate(new List<T> { instance });
         }
-
 
         public ListSegment<SearchResult> Search(SearchOptions searchOptions)
         {
@@ -126,16 +101,15 @@ namespace MyStore.SearchProvider
 
             if (string.IsNullOrEmpty(searchOptions.Query))
                 return results;
-
-            var searchQuery = string.Join(" ", searchOptions.Query.Trim().Replace("-", " ").Split(' ')
-             .Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim() + "*"));
+            
+            var searchQuery = string.Join(" AND ", QueryParser.Escape(searchOptions.Query.Trim())
+                .Split().Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim() + "*"));
 
             if (string.IsNullOrWhiteSpace(searchQuery))
                 return results;
 
-            using (var searcher = new IndexSearcher(FSDirectory, true))
+            using (var searcher = new IndexSearcher(Directory, true))
             {
-
                 var analyzer = GetAnalyzer();
 
                 QueryParser parser;
@@ -151,9 +125,7 @@ namespace MyStore.SearchProvider
                 {
                     parser = parser = new MultiFieldQueryParser(luceneVersion, searchOptions.SearchFields.ToArray(), analyzer);
                 }
-
-                var query = ParseQuery(searchQuery, parser);
-
+                
                 Sort sort;
                 if (string.IsNullOrEmpty(searchOptions.SortField))
                 {
@@ -169,7 +141,7 @@ namespace MyStore.SearchProvider
 
                 var hitsLimit = (pNumber + 1) * pSize;
 
-                var docs = searcher.Search(query, null, hitsLimit, sort);
+                var docs = searcher.Search(parser.Parse(searchQuery), null, hitsLimit, sort);
 
                 var totalHits = docs.TotalHits;
 
@@ -219,7 +191,7 @@ namespace MyStore.SearchProvider
 
         public void Clear(string id)
         {
-            Clear(new List<string> { id });
+            Clear(new string[] { id });
         }
 
         public void Optimize()

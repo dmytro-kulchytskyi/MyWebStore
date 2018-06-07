@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyStore.Business.Search.Managers
 {
-    public partial class ProductSearchManager
+    public class ProductSearchManager
     {
         private readonly ProductManager productManager;
 
@@ -18,7 +18,9 @@ namespace MyStore.Business.Search.Managers
 
         private readonly ISearchProvider<Product> searchProvider;
 
-        private static readonly string directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppConfiguration.SearchManagerFolderName, nameof(Product));
+        public static readonly string directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppConfiguration.SearchManagerFolderName, nameof(Product));
+
+        public string DirectoryPath => directoryPath;
 
         public ProductSearchManager(ProductManager productManager, ISearchProviderFactory<Product> searchProviderFactory)
         {

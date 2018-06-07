@@ -9,10 +9,12 @@
 <div>
     <div>
         <h3>@Model.Title</h3>
-        <img src="~/Content/Images/@Model.Image" alt="Image" style="width: 400px; height: 400px;" />
+        <div style="margin: 18px">
+            <img src="~/Content/Images/@Model.Image" alt="Image" style="max-width: 600px; max-height: 600px" />
+        </div>
         <p>@Model.Description</p>
         <p>@Html.DisplayNameFor(m => m.Stock): @Model.Stock</p>
-        <p>@Html.DisplayNameFor(m => m.Price): @Model.Price.ToString("C2")</p>
+        <p>@Html.DisplayNameFor(m => m.Price): @Html.PriceFormat(Model.Price)</p>
         @if (Model.Stock > 0)
         {
             <input type="button" class="btn btn-success add-to-basket" value="Add to basket" />
@@ -23,7 +25,7 @@
         }
     </div>
 </div>
-<p>
+<p style="margin-top: 20px;">
     @if (!string.IsNullOrEmpty(Model.ReturnUrl))
     {
         <a href="@Model.ReturnUrl">Back</a>

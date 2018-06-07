@@ -12,11 +12,11 @@ namespace MyStore.Mvc.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        private readonly ProductSearchManager productSearchManager;
+        private readonly ProductISearchIndexManager productSearchIndexManager;
 
-        public AdminController(ProductSearchManager productSearchManager)
+        public AdminController(ProductISearchIndexManager productSearchManager)
         {
-            this.productSearchManager = productSearchManager;
+            this.productSearchIndexManager = productSearchManager;
         }
 
         public ActionResult Index()
@@ -28,9 +28,9 @@ namespace MyStore.Mvc.Controllers
         {
             var model = new SearchSettingsViewModel
             {
-                IndexStatus = productSearchManager.IndexStatus,
-                IndexProgress = productSearchManager.IndexProgress,
-                ErrorMessage = productSearchManager.IndexError
+                IndexStatus = productSearchIndexManager.IndexStatus,
+                IndexProgress = productSearchIndexManager.IndexProgress,
+                ErrorMessage = productSearchIndexManager.IndexError
             };
 
             return View(model);
@@ -40,8 +40,8 @@ namespace MyStore.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateSearchIndex()
         {
-            if (productSearchManager.IndexStatus != IndexStatus.InProgress)
-                productSearchManager.CreateSearchIndex();
+            if (productSearchIndexManager.IndexStatus != IndexStatus.InProgress)
+                productSearchIndexManager.CreateSearchIndex();
 
             return RedirectToAction("SearchSettings");
         }

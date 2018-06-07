@@ -1,0 +1,27 @@
+﻿@model MyStore.Mvc.Models.ProductViewModels.ProductListItemViewModel
+
+<div class="productsListItem @(Model.Stock == 0 ? "notInStock" : "")">
+    <h3>
+        <a href="@Url.Action("Details", "Product", new
+   {
+       Link = Model.Url,
+       Id = Model.Id,
+       returnUrl = Request.Url.PathAndQuery
+   })">@Html.PreviewText(Model.Title, 12)</a>
+
+</h3>
+<img alt="Image" src="~/Content/Images/@Model.Image" style="max-width:150px; max-height: 160px;" />
+<div style="display: flex; justify-content: center; align-items: center; flex-direction: column">
+    <p>@Html.DisplayNameFor(m => m.Price): @Html.PriceFormat(Model.Price)</p>
+    <p>
+        @if (Model.Stock > 0)
+        {
+            <input type="button" class="btn btn-success add-to-basket" value="Add to basket" />
+        }
+        else
+        {
+            <input type="button" class="btn add-to-basket" value="Not in stock" disabled="disabled" />
+        }
+    </p>
+</div>
+</div>

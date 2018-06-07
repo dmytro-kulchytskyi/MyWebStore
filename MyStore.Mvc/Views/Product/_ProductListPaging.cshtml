@@ -1,0 +1,51 @@
+﻿@model MyStore.Mvc.Models.ProductViewModels.ProductsListViewModel
+
+
+<ul class="pagination">
+    @{
+        var paginationOffset = 5;
+    }
+
+    @if (Model.PageNumber > paginationOffset)
+    {
+        <li>
+            @Html.ActionLink("«", ViewContext.RouteData.Values["action"].ToString(), new
+            {
+                pageNumber = 1,
+                orderField = Model.OrderField != Model.DefaultOrderField ? Model.OrderField : "",
+                inverseOrder = Model.InverseOrder ? "True" : "",
+                query = Model.Query
+            }, null)
+        </li>
+    }
+
+    @for (var i = Model.PageNumber - paginationOffset; i < Model.PageNumber + paginationOffset && i < Model.PageCount; i++)
+    {
+        if (i >= 0)
+        {
+            <li>
+                @Html.ActionLink((i + 1).ToString(), ViewContext.RouteData.Values["action"].ToString(), new
+                {
+                    pageNumber = i + 1,
+                    orderField = Model.OrderField != Model.DefaultOrderField ? Model.OrderField : "",
+                    inverseOrder = Model.InverseOrder ? "True" : "",
+                    query = Model.Query
+                }, new { @class = Model.PageNumber == i ? "active" : "" })
+            </li>
+        }
+    }
+
+    @if (Model.PageNumber < Model.PageCount - paginationOffset - 1)
+    {
+        <li>
+            @Html.ActionLink("»", ViewContext.RouteData.Values["action"].ToString(), new
+            {
+                pageNumber = Model.PageCount,
+                orderField = Model.OrderField != Model.DefaultOrderField ? Model.OrderField : "",
+                inverseOrder = Model.InverseOrder ? "True" : "",
+                query = Model.Query
+            }, null)
+        </li>
+    }
+
+</ul>

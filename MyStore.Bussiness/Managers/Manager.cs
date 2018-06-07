@@ -21,7 +21,7 @@ namespace MyStore.Business.Managers
         public virtual T GetById(string id)
         {
             if (string.IsNullOrEmpty(id))
-                throw new ArgumentException($"{nameof(id)} can't be empty");
+                throw new ArgumentException($"{nameof(id)} required");
 
             return provider.GetById(id);
         }
@@ -31,9 +31,9 @@ namespace MyStore.Business.Managers
             return provider.GetCount();
         }
 
-        public ListSegment<T> GetPageOrderedBy(string fieldName, bool desc, int pageSize, int pageNumber)
+        public ListSegment<T> GetPageOrderedBy(string fieldName, bool inverseOrder, int pageSize, int pageNumber)
         {
-            return provider.GetPageOrderedBy(fieldName, desc, pageSize, pageNumber);
+            return provider.GetPageOrderedBy(fieldName, inverseOrder, pageSize, pageNumber);
         }
     }
 }

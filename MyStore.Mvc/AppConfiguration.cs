@@ -8,6 +8,8 @@ namespace MyStore.Mvc
 {
     public static class AppConfiguration
     {
+        public static string LineOwerflowEnding => ConfigurationManager.AppSettings["LineOwerflowEnding"];
+
         public static int TopProductsCount => int.Parse(ConfigurationManager.AppSettings["TopProductsCount"]);
         
         public static int DefaultPageSize => int.Parse(ConfigurationManager.AppSettings["ProductsOnPage"]);
@@ -20,8 +22,6 @@ namespace MyStore.Mvc
             .Select(x => x.Trim())
             .ToArray();
 
-        public static int SearchResultsCount => int.Parse(ConfigurationManager.AppSettings["SearchResultsCount"]);
-
-        public static int SearchPageMaxItemCount => int.Parse(ConfigurationManager.AppSettings["SearchPageMaxItemCount"]);
+        public static int SearchDropdownItemsLimit => int.Parse(ConfigurationManager.AppSettings["SearchDropdownItemsLimit"]);
     }
 }

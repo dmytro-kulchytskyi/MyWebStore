@@ -40,14 +40,13 @@
 
     $(input).on("keydown", function (e) {
         if (e.keyCode === 13) {
-            var inputVal = $(this).val();
+            var inputVal = ($(this).val() || "").trim();
             if (inputVal)
-                window.location = '/Products?' + $.param({ query: inputVal });
+                window.location = '/SearchPage?' + $.param({ query: inputVal });
         }
     });
 
     $(input).focusin(function () {
-        console.log("ficus")
         if (($(this).val() || "").trim())
             $(searchItems).show();
     });
