@@ -26,14 +26,22 @@ namespace MyStore.Business.Managers
             return provider.GetById(id);
         }
 
+        public virtual IList<T> GetById(IEnumerable<string> ids)
+        {
+            if (ids == null)
+                throw new ArgumentNullException(nameof(ids));
+
+            return provider.GetById(ids);
+        }
+
         public virtual int GetCount()
         {
             return provider.GetCount();
         }
 
-        public ListSegment<T> GetPageOrderedBy(string fieldName, bool inverseOrder, int pageSize, int pageNumber)
+        public ListSegment<T> GetPageSortedBy(string fieldName, bool inverseSort, int pageSize, int pageNumber)
         {
-            return provider.GetPageOrderedBy(fieldName, inverseOrder, pageSize, pageNumber);
+            return provider.GetPageSortedBy(fieldName, inverseSort, pageSize, pageNumber);
         }
     }
 }

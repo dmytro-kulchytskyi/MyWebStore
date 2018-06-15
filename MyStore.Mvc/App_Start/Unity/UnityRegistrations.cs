@@ -30,6 +30,9 @@ namespace MyStore.Mvc.App_Start.Unity
             c.RegisterType<IProductProvider, Nhibarnate.Providers.ProductProvider>();
             c.RegisterType<IAddressProvider, Nhibarnate.Providers.AddressProvider>();
 
+            c.RegisterType<ISearchIndexInfoProvider, Nhibarnate.Providers.SearchIndexInfoProvider>();
+            c.RegisterType<IBasketProvider, Nhibarnate.Providers.BasketProvider>();
+
             c.RegisterType<ISearchProviderFactory<Product>, ProductSearchProviderFactory>();
         }
     }

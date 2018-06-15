@@ -87,12 +87,11 @@ namespace MyStore.Nhibarnate.Providers
             return instance;
         }
 
-        public virtual ListSegment<T> GetPageOrderedBy(string fieldName, bool inverseOrder, int pageSize, int pageNumber)
+        public virtual ListSegment<T> GetPageSortedBy(string fieldName, bool inverseSort, int pageSize, int pageNumber)
         {
             return providerHelper.Invoke(s =>
-            {
-                var query = s.QueryOver<T>().OrderBy(Projections.Property(fieldName));
-                var items = (inverseOrder ? query.Asc : query.Desc).Skip(pageNumber * pageSize).Take(pageSize).List();
+            {                var query = s.QueryOver<T>().OrderBy(Projections.Property(fieldName));
+                var items = (inverseSort ? query.Desc : query.Asc).Skip(pageNumber * pageSize).Take(pageSize).List();
                 var totalCount = s.QueryOver<T>().RowCount();
 
                 return new ListSegment<T>

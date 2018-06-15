@@ -9,6 +9,6 @@ namespace MyStore.Business
 {
     public static class AppConfiguration
     {
-        public static string SearchManagerFolderName => ConfigurationManager.AppSettings["SearchManagerFolderName"];
+        public static string SearchManagerFolderName => ConfigurationManager.AppSettings["Business.SearchManager.FolderName"];
     }
 }

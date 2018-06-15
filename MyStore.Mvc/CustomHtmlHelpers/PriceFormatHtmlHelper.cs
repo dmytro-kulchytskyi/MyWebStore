@@ -9,9 +9,9 @@ namespace MyStore.Mvc.CustomHtmlHelpers
 {
     public static class PriceFormatHtmlHelper
     {
-        public static MvcHtmlString PriceFormat(this HtmlHelper htmlHelper, double price)
+        public static MvcHtmlString PriceFormat(this HtmlHelper htmlHelper, decimal price)
         {
-            return MvcHtmlString.Create(price.ToString("C2", CultureInfo.CurrentCulture));
+            return MvcHtmlString.Create(Business.PriceFormat.GetFormatedPrice(price));
         }
     }
 }

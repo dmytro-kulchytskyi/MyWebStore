@@ -14,8 +14,8 @@ namespace MyStore.Business.Search
 
         public virtual bool IndexInProgress { get; set; }
 
-        public virtual int IndexationProgressPercentage { get; set; }
-
+        public virtual bool IndexFinished { get; set; }
+        
         public virtual DateTime Date { get; set; }
 
         public virtual bool IndexSuccess { get; set; }

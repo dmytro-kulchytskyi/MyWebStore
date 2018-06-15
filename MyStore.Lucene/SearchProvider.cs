@@ -133,7 +133,7 @@ namespace MyStore.SearchProvider
                 }
                 else
                 {
-                    sort = new Sort(new SortField(searchOptions.SortField, SortField.STRING, searchOptions.InverseOrder));
+                    sort = new Sort(new SortField(searchOptions.SortField, SortField.STRING, searchOptions.InverseSort));
                 }
 
                 var pSize = searchOptions.PageSize;

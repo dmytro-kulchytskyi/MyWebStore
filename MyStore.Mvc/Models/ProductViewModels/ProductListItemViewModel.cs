@@ -19,7 +19,7 @@ namespace MyStore.Mvc.Models.ProductViewModels
 
         [Display(Name = "Price")]
         [DataType(DataType.Currency)]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         [ScaffoldColumn(false)]
         public DateTime Added { get; set; }

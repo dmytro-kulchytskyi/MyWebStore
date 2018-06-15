@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyStore</title>
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/Animate.css")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
@@ -23,6 +24,7 @@
             <div class="navbar-collapse collapse">
                 @Html.Partial("SearchFieldPartial")
 
+
                 @Html.Partial("_LoginPartial")
 
                 @if (User.IsInRole("Admin"))
@@ -33,6 +35,17 @@
                         </li>
                     </ul>
                 }
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            @Html.ActionLink("Basket", "BasketPage", "Basket", new { area = "" }, new { @class = "navbar-brand" })
+                        </li>
+                    </ul>
+
+                }
+
 
 
             </div>
@@ -48,7 +61,9 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/notify.js")
     @Scripts.Render("~/Scripts/SearchField.js")
+    @Scripts.Render("~/Scripts/AddToBasketButtonHandler.js")
     @RenderSection("scripts", required: false)
 </body>
 </html>

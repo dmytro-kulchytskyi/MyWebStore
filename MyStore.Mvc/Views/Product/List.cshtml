@@ -15,41 +15,9 @@
         <p>Found: @Model.TotalItemsCount</p>
     }
 </div>
+
 <hr />
-<div style="margin-left: 25px;">
-    <h4>Sort</h4>
-    @using (Html.BeginForm("List", "Product", new { pageNumber = 1 }, FormMethod.Post, new { @class = "productsSortBar", role = "form", id = "productListSortBar" }))
-    {
-        @Html.HiddenFor(m => m.Query)
-        <div>
-            @Html.DisplayNameFor(m => m.OrderField)
-            @Html.HiddenFor(m => m.OrderField)
-            @Html.DropDownListFor(m => m.OrderField, Model.AvailableOrderFields.Select(f => new SelectListItem
-            {
-                Value = f,
-                Text = string.IsNullOrEmpty(f) ? "Relevant" : f
-            }), new { @class = "productsSortBarInput" })
-        </div>
-        <div id="inverseOrderField">
-            @Html.DisplayNameFor(m => m.InverseOrder)
-            @Html.HiddenFor(m => m.InverseOrder)
-            @Html.DropDownListFor(m => m.InverseOrder, new SelectListItem[]
-            {
-                new SelectListItem
-                {
-                    Text = "Default",
-                    Value = ""
-                },
-                new SelectListItem
-                {
-                    Text = "Inverse",
-                    Value = true.ToString()
-                }
-            }, new { @class = "productsSortBarInput" })
-        </div>
-        <input type="submit" value="Sort" class="btn btn-sm btn-success">
-    }
-</div>
+    @Html.Partial("_ProductsSortBar", Model)
 <hr />
 
 <div class="productsList" id="productsContainer">

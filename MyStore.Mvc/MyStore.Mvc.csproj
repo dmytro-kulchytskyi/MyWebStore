@@ -229,6 +229,7 @@
     <Compile Include="App_Start\Unity\UnityRegistrations.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\BasketController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
@@ -246,12 +247,17 @@
     <Compile Include="Identity\Stores\IdentityUserStore.cs" />
     <Compile Include="Models\AccountViewModels\AccountViewModels.cs" />
     <Compile Include="Models\AccountViewModels\CountryViewModel.cs" />
+    <Compile Include="Models\BasketViewModelsMapperProfile.cs" />
+    <Compile Include="Models\AdminViewModelsMapperProfile.cs" />
     <Compile Include="Models\AdminViewModels\SearchSettingsViewModel.cs" />
+    <Compile Include="Models\BasketViewModels\AddToBasketButtonViewModel.cs" />
+    <Compile Include="Models\BasketViewModels\AddToBasketResultViewModel.cs" />
+    <Compile Include="Models\BasketViewModels\BasketProductViewModel.cs" />
+    <Compile Include="Models\BasketViewModels\BasketViewModel.cs" />
     <Compile Include="Models\ProductMapperProfile.cs" />
     <Compile Include="Models\ManageViewModels\ManageViewModels.cs" />
     <Compile Include="Models\ProductViewModels\ProductDetailsViewModel.cs" />
     <Compile Include="Models\ProductViewModels\ProductListItemViewModel.cs" />
-    <Compile Include="Models\ProductViewModels\ProductSearchListViewModel.cs" />
     <Compile Include="Models\ProductViewModels\ProductsListViewModel.cs" />
     <Compile Include="PagedList.cs" />
     <Compile Include="CustomHtmlHelpers\PriceFormatHtmlHelper.cs" />
@@ -260,8 +266,10 @@
     <Compile Include="RequestDataStorage.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="UrlHelper.cs" />
+    <None Include="Views\Shared\_AddToBasketResultPopup.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Animate.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\123.jpg" />
@@ -317,6 +325,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\AddToBasketButtonHandler.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -336,6 +345,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\notify.js" />
     <Content Include="Scripts\ProductsSortBar.js" />
     <Content Include="Scripts\ProductsListScroll.js" />
     <Content Include="Scripts\respond.js" />
@@ -343,6 +353,8 @@
     <Content Include="Scripts\SearchField.js" />
     <Content Include="Views\Admin\_ViewStart.cshtml" />
     <Content Include="Views\Account\_ViewStart.cshtml" />
+    <Content Include="Views\Product\_ProductsSortBar.cshtml" />
+    <Content Include="Views\Basket\BasketPage.cshtml" />
     <None Include="Views\Product\_ProductListPaging.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -371,7 +383,6 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Product\List.cshtml" />
     <Content Include="Views\Product\_ProductListItem.cshtml" />
-    <Content Include="Views\Product\_ProductsPage.cshtml" />
     <Content Include="Views\Product\_TopProducts.cshtml" />
     <Content Include="Views\Product\Details.cshtml" />
     <Content Include="Views\Shared\SearchFieldPartial.cshtml" />
@@ -380,6 +391,7 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\SearchSettings.cshtml" />
     <Content Include="Views\Shared\_LayoutSimple.cshtml" />
+    <Content Include="Views\Shared\_AddToBasketButton.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

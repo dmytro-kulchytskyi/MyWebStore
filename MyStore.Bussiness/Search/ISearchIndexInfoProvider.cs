@@ -9,5 +9,8 @@ namespace MyStore.Business.Search
     public interface ISearchIndexInfoProvider
     {
         SearchIndexInfo GetCurrentSearchIndexInfo();
+        void SaveCurrentSearchIndexInfo(SearchIndexInfo searchIndexInfo);
+        void EnterLock();
+        void ExitLock();
     }
 }

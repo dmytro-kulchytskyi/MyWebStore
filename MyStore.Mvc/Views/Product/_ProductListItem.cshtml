@@ -13,15 +13,14 @@
 <img alt="Image" src="~/Content/Images/@Model.Image" style="max-width:150px; max-height: 160px;" />
 <div style="display: flex; justify-content: center; align-items: center; flex-direction: column">
     <p>@Html.DisplayNameFor(m => m.Price): @Html.PriceFormat(Model.Price)</p>
-    <p>
-        @if (Model.Stock > 0)
-        {
-            <input type="button" class="btn btn-success add-to-basket" value="Add to basket" />
-        }
-        else
-        {
-            <input type="button" class="btn add-to-basket" value="Not in stock" disabled="disabled" />
-        }
-    </p>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        @Html.Partial("_AddToBasketButton", new MyStore.Mvc.Models.BasketViewModels.AddToBasketButtonViewModel
+            {
+                IsInStock = Model.SellsCount > 0,
+                ProductId = Model.Id,
+            })
+    }
 </div>
 </div>

@@ -1,7 +1,13 @@
-﻿body {
+﻿.alert p {
+    margin: 0;
+}
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
+    font-family: Arial, Helvetica, sans-serif;
 }
+
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
@@ -100,9 +106,9 @@ textarea {
     border-top: 1px solid #f2f2f2;
 }
 
-.productSearchItem:hover {
-    background-color: ghostwhite;
-}
+    .productSearchItem:hover {
+        background-color: ghostwhite;
+    }
 
 .itemImageContainer {
     display: flex;
@@ -145,7 +151,6 @@ textarea {
 }
 
     .productsSortBar .productsSortBarInput {
-        margin: 3px;
         margin-right: 8px;
         border-radius: 3px;
         box-sizing: border-box;
@@ -185,3 +190,25 @@ textarea {
         .pagination a.active:hover {
             background-color: #4CAF50 !important;
         }
+
+
+
+
+.loader {
+    border: 3px solid #f3f3f3; /* Light grey */
+    border-top: 3px solid green; /* Blue */
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

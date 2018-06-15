@@ -22,7 +22,7 @@ namespace MyStore.Mvc.Models.ProductViewModels
 
         [Display(Name = "Price")]
         [DataType(DataType.Currency)]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         [Display(Name = "Selling Count")]
         public int SellsCount { get; set; }
@@ -35,5 +35,8 @@ namespace MyStore.Mvc.Models.ProductViewModels
 
         [ScaffoldColumn(false)]
         public string ReturnUrl { get; set; }
+
+        [ScaffoldColumn(false)]
+        public bool AlreadyInBasket { get; set; }
     }
 }

@@ -12,17 +12,15 @@
         <div style="margin: 18px">
             <img src="~/Content/Images/@Model.Image" alt="Image" style="max-width: 600px; max-height: 600px" />
         </div>
-        <p>@Model.Description</p>
+        <p style="font-size: 12pt; margin-bottom: 24px">@Model.Description</p>
+
         <p>@Html.DisplayNameFor(m => m.Stock): @Model.Stock</p>
         <p>@Html.DisplayNameFor(m => m.Price): @Html.PriceFormat(Model.Price)</p>
-        @if (Model.Stock > 0)
+        @Html.Partial("_AddToBasketButton", new MyStore.Mvc.Models.BasketViewModels.AddToBasketButtonViewModel
         {
-            <input type="button" class="btn btn-success add-to-basket" value="Add to basket" />
-        }
-        else
-        {
-            <input type="button" class="btn add-to-basket" value="Not in stock" disabled="disabled" />
-        }
+            IsInStock = Model.SellsCount > 0,
+            ProductId = Model.Id
+        })
     </div>
 </div>
 <p style="margin-top: 20px;">

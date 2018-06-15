@@ -18,7 +18,7 @@ namespace MyStore.Business.Search
         
         public string SortField { get; set; }
 
-        public bool InverseOrder { get; set; }
+        public bool InverseSort { get; set; }
 
         public IEnumerable<string> SearchFields { get; set; }
 

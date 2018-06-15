@@ -11,7 +11,7 @@ namespace MyStore.Mvc
     {
         public static string GetUrlSafeLine(string line)
         {
-            return Regex.Replace(line, @"([^\wА-Яа-яі]+)", "-", RegexOptions.Compiled).Trim('_');
+            return Regex.Replace(line, @"([^\wА-Яа-яі]+)", "-", RegexOptions.Compiled).Trim('-');
         }
     }
 }

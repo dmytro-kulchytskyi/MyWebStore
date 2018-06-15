@@ -23,17 +23,14 @@ namespace MyStore.Mvc.Models.ProductViewModels
         [ScaffoldColumn(false)]
         public int TotalItemsCount { get; set; }
 
-        [Display(Name = "Order by:")]
-        public string OrderField { get; set; }
-
-        [Display(Name = "Order type:")]
-        public bool InverseOrder { get; set; }
+        [ScaffoldColumn(false)]
+        public string SortField { get; set; }
 
         [ScaffoldColumn(false)]
-        public string DefaultOrderField { get; set; }
+        public bool InverseSort { get; set; }
 
         [ScaffoldColumn(false)]
-        public string[] AvailableOrderFields { get; set; }
+        public string[] AvailableSortFields { get; set; }
 
         [ScaffoldColumn(false)]
         public IList<ProductListItemViewModel> Items { get; set; }

@@ -1,4 +1,6 @@
-﻿using MyStore.Business.Managers;
+﻿using AutoMapper;
+using MyStore.Business.Managers;
+using MyStore.Business.Search;
 using MyStore.Business.Search.Managers;
 using MyStore.Mvc.Models.AdminViewModels;
 using System;
@@ -26,11 +28,17 @@ namespace MyStore.Mvc.Controllers
 
         public ActionResult SearchSettings()
         {
-            var model = new SearchSettingsViewModel
+            var searchIndexInfo = productSearchIndexManager.GetCurrentSearchIndexInfo();
+
+            SearchSettingsViewModel model;
+            if (searchIndexInfo != null)
             {
-                IndexStatus = productSearchIndexManager.IndexStatus,
-                IndexProgress = productSearchIndexManager.IndexProgress,
-                ErrorMessage = productSearchIndexManager.IndexError
+                model = Mapper.Map<SearchSettingsViewModel>(searchIndexInfo);
+                model.IndexExists = true;
+            }
+            else model = new SearchSettingsViewModel
+            {
+                IndexExists = false
             };
 
             return View(model);
@@ -40,8 +48,7 @@ namespace MyStore.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateSearchIndex()
         {
-            if (productSearchIndexManager.IndexStatus != IndexStatus.InProgress)
-                productSearchIndexManager.CreateSearchIndex();
+            productSearchIndexManager.CreateSearchIndex();
 
             return RedirectToAction("SearchSettings");
         }

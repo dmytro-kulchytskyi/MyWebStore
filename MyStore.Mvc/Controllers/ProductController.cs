@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNet.Identity;
 using MyStore.Business;
 using MyStore.Business.Entities;
 using MyStore.Business.Managers;
@@ -28,28 +29,30 @@ namespace MyStore.Mvc.Controllers
             this.productSearchManager = productSearchManager;
         }
 
+        private void InitializeProductsListViewModel(ProductsListViewModel model, int totalCount, IEnumerable<string> availableSortFields, IList<ProductListItemViewModel> products)
+        {
+            model.TotalItemsCount = totalCount;
+            model.AvailableSortFields = availableSortFields.ToArray();
+            model.Items = products;
+        }
+
         [HttpGet]
         public ActionResult List(ProductsListViewModel model)
         {
-            var availableOrderFields = AppConfiguration.AvailableProductSortFields.ToList();
+            var availableSortFields = AppConfiguration.ProductsListAvailableOrderTypes.ToList();
 
-            if (string.IsNullOrEmpty(model.OrderField))
-                model.OrderField = AppConfiguration.DefaulOrderField;
+            if (string.IsNullOrEmpty(model.SortField))
+                model.SortField = availableSortFields.First();
 
-            if (!availableOrderFields.Contains(model.OrderField))
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-
-            var results = productManager.GetPageOrderedBy(
-                model.OrderField,
-                model.InverseOrder,
+            var results = productManager.GetPageSortedBy(
+                model.SortField,
+                model.InverseSort,
                 model.PageSize,
                 model.PageNumber);
 
-            model.TotalItemsCount = results.TotalCount;
             var products = Mapper.Map<IList<ProductListItemViewModel>>(results.Items);
 
-            model.AvailableOrderFields = availableOrderFields.ToArray();
-            model.Items = products;
+            InitializeProductsListViewModel(model, results.TotalCount, availableSortFields, products);
 
             return View(model);
         }
@@ -57,32 +60,22 @@ namespace MyStore.Mvc.Controllers
         [HttpGet]
         public ActionResult SearchPage(ProductsListViewModel model)
         {
-            if (string.IsNullOrEmpty(model.Query))
-                return RedirectToAction("List", model);
-
-            var availableOrderFields = AppConfiguration.AvailableProductSortFields.ToList();
-
-            if (!string.IsNullOrEmpty(model.OrderField) && !availableOrderFields.Contains(model.OrderField))
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-
-            availableOrderFields.Insert(0, "");
-
             var searchResults = productSearchManager.Search(new SearchOptions
             {
                 Query = model.Query,
                 PageNumber = model.PageNumber,
                 ResultFields = ProductFields.AllExcept(ProductFields.Description),
                 PageSize = model.PageSize,
-                InverseOrder = model.InverseOrder,
-                SortField = model.OrderField
+                InverseSort = model.InverseSort,
+                SortField = model.SortField
             });
 
             var products = Mapper.Map<IList<ProductListItemViewModel>>(searchResults.Items);
 
-            model.TotalItemsCount = searchResults.TotalCount;
+            var availableSortFields = AppConfiguration.ProductsListAvailableOrderTypes.ToList();
+            availableSortFields.Add("");
 
-            model.AvailableOrderFields = availableOrderFields.ToArray();
-            model.Items = products;
+            InitializeProductsListViewModel(model, searchResults.TotalCount, availableSortFields, products);
 
             return View("List", model);
         }
@@ -93,7 +86,8 @@ namespace MyStore.Mvc.Controllers
             var count = AppConfiguration.TopProductsCount;
             var products = productManager.GetTop(ProductFields.SellsCount, count);
 
-            var model = Mapper.Map<IEnumerable<ProductListItemViewModel>>(products);
+            var model = Mapper.Map<IList<ProductListItemViewModel>>(products);
+
             return PartialView("_TopProducts", model);
         }
 

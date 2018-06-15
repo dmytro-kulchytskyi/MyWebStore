@@ -8,20 +8,19 @@ namespace MyStore.Mvc
 {
     public static class AppConfiguration
     {
-        public static string LineOwerflowEnding => ConfigurationManager.AppSettings["LineOwerflowEnding"];
+        public static string LineOwerflowEnding => ConfigurationManager.AppSettings["Mvc.LineOwerflowEnding"];
 
-        public static int TopProductsCount => int.Parse(ConfigurationManager.AppSettings["TopProductsCount"]);
+        public static int TopProductsCount => int.Parse(ConfigurationManager.AppSettings["Mvc.TopProducts.Count"]);
         
-        public static int DefaultPageSize => int.Parse(ConfigurationManager.AppSettings["ProductsOnPage"]);
+        public static int ProductListPageSize => int.Parse(ConfigurationManager.AppSettings["Mvc.ProductList.ProductsOnPage"]);
 
-        public static string DefaulOrderField => ConfigurationManager.AppSettings["DefaulOrderField"];
-
-        public static string[] AvailableProductSortFields =>
-            ConfigurationManager.AppSettings["AvailableProductSortFields"]
+ 
+        public static string[] ProductsListAvailableOrderTypes => ConfigurationManager.AppSettings["Mvc.ProductList.SortFields"]
             .Split(',')
             .Select(x => x.Trim())
             .ToArray();
 
-        public static int SearchDropdownItemsLimit => int.Parse(ConfigurationManager.AppSettings["SearchDropdownItemsLimit"]);
+    
+        public static int SearchDropdownItemsLimit => int.Parse(ConfigurationManager.AppSettings["Mvc.SearchDropdown.MaxResults"]);
     }
 }

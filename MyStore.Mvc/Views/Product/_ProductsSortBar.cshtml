@@ -1,0 +1,17 @@
+﻿@model MyStore.Mvc.Models.ProductViewModels.ProductsListViewModel
+
+<div style="margin-left: 25px;">
+    <h4>Sort</h4>
+    @using (Html.BeginForm(ViewContext.RouteData.Values["action"].ToString(), "Product", new { pageNumber = 1 }, FormMethod.Post, new { @class = "productsSortBar", role = "form", id = "productListSortBar" }))
+    {
+        @Html.HiddenFor(m => m.Query)
+        <div>
+            @Html.DropDownListFor(m => m.OrderType, Model.AvailableOrderTypes.Select(f => new SelectListItem
+            {
+                Value = f,
+                Text = f
+            }), new { @class = "productsSortBarInput" })
+        </div>
+        <input type="submit" value="Sort" class="btn btn-sm btn-success">
+    }
+</div>

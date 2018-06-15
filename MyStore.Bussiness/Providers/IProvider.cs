@@ -11,7 +11,7 @@ namespace MyStore.Business.Providers
     {
         IList<T> GetById(IEnumerable<string> ids);
         int GetCount();
-        ListSegment<T> GetPageOrderedBy(string fieldName, bool inverseOrder, int count, int pageNumber);
+        ListSegment<T> GetPageSortedBy(string fieldName, bool inverseSort, int count, int pageNumber);
         T GetById(string id);
         T Save(T instance);
         void Update(T instance);

@@ -19,7 +19,7 @@ namespace MyStore.Mvc
             if (result.PageNumber < 0)
                 result.PageNumber = 0;
 
-            result.PageSize = AppConfiguration.DefaultPageSize;
+            result.PageSize = AppConfiguration.ProductListPageSize;
 
             return result;
         }

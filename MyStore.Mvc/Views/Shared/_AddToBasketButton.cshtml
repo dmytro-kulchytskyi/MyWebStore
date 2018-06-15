@@ -1,0 +1,20 @@
+﻿@model MyStore.Mvc.Models.BasketViewModels.AddToBasketButtonViewModel
+
+<div style="margin-bottom: 10px">
+    @if (Model.IsInStock)
+    {
+        using (Html.BeginForm("Add", "Basket", FormMethod.Post, new { @class = "addToBasketForm" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("productId", Model.ProductId)
+            <div class="button-container">
+                <input type="submit" class="btn btn-success add-to-basket" value="Add to basket" />
+            </div>
+            <div class="loader" style="display: none"></div>
+        }
+    }
+    else
+    {
+        <input type="button" class="btn add-to-basket" value="Not in stock" disabled="disabled" />
+    }
+</div>

@@ -11,81 +11,102 @@ namespace MyStore.Business.Search.Managers
 {
     public class ProductISearchIndexManager
     {
-        private static readonly object reindexndexLock = new object();
-
-        private static IndexStatus indexStatus;
-
-        private static double indexProgress;
-
-        private static string indexError;
-
         private readonly ProductManager productManager;
-
-        private readonly ProductSearchManager productSearchManager;
 
         private readonly ISearchProviderFactory<Product> searchProviderFactory;
 
-        public IndexStatus IndexStatus => indexStatus;
+        private readonly ISearchIndexInfoProvider searchIndexInfoProvider;
 
-        public double IndexProgress => indexProgress;
-
-        public string IndexError => indexError;
+        private static double indexProgressPercentage;
 
         public ProductISearchIndexManager(ProductManager productManager,
                                           ProductSearchManager productSearchManager,
+                                          ISearchIndexInfoProvider searchIndexInfoProvider,
                                           ISearchProviderFactory<Product> searchProviderFactory)
         {
+            this.searchIndexInfoProvider = searchIndexInfoProvider;
             this.searchProviderFactory = searchProviderFactory;
             this.productManager = productManager;
-            this.productSearchManager = productSearchManager;
+            this.ProductSearchManager = productSearchManager;
+        }
+
+        public ProductSearchManager ProductSearchManager { get; private set; }
+
+        public double GetCurrentIndexProgressPercentage()
+        {
+            return indexProgressPercentage;
+        }
+
+        public SearchIndexInfo GetCurrentSearchIndexInfo()
+        {
+            return searchIndexInfoProvider.GetCurrentSearchIndexInfo();
         }
 
         public void CreateSearchIndex()
         {
-            lock (reindexndexLock)
-            {
-                if (indexStatus == IndexStatus.InProgress)
-                    throw new InvalidOperationException("Indexation task already in progress");
+            var currentSearchIndexInfo = GetCurrentSearchIndexInfo();
 
-                indexStatus = IndexStatus.InProgress;
-                indexProgress = 0;
-            }
+            searchIndexInfoProvider.EnterLock();
+
+            searchIndexInfoProvider.SaveCurrentSearchIndexInfo(new SearchIndexInfo()
+            {
+                Date = DateTime.Now,
+                IndexInProgress = true,
+            });
 
             Task.Run(() =>
             {
+                var indexDirectory = new DirectoryInfo(Path.Combine(
+                       AppDomain.CurrentDomain.BaseDirectory,
+                       AppConfiguration.SearchManagerFolderName,
+                       Guid.NewGuid().ToString()));
+
                 try
                 {
-                    var tempDir = new DirectoryInfo(Path.Combine(
-                        AppDomain.CurrentDomain.BaseDirectory,
-                        AppConfiguration.SearchManagerFolderName,
-                        Guid.NewGuid().ToString()));
-
-                    var searchProvider = searchProviderFactory.GetProvider(tempDir);
+                    var searchProvider = searchProviderFactory.GetProvider(indexDirectory);
 
                     var batchSize = 100;
                     var pageCount = (int)Math.Ceiling(productManager.GetCount() / (double)batchSize);
                     for (var page = 0; page < pageCount; page++)
                     {
-                        var products = productManager.GetPageOrderedBy(ProductFields.Title, false, batchSize, page).Items;
+                        var products = productManager.GetPageSortedBy(ProductFields.Title, false, batchSize, page).Items;
                         searchProvider.AddOrUpdate(products);
-                        indexProgress = (double)page / pageCount;
+                        indexProgressPercentage = 100 * ((page + 1) / (double)pageCount);
                     }
 
                     searchProvider.Optimize();
 
-                    var path = productSearchManager.DirectoryPath;
+                    searchIndexInfoProvider.SaveCurrentSearchIndexInfo(new SearchIndexInfo
+                    {
+                        IndexFilesLocation = indexDirectory.FullName,
+                        Date = DateTime.Now,
+                        IndexSuccess = true,
+                        IndexFinished = true
+                    });
 
-                    if (Directory.Exists(path))
-                        new DirectoryInfo(path).Delete(true);
-
-                    tempDir.MoveTo(path);
-
-                    indexStatus = IndexStatus.Success;
+                    if (currentSearchIndexInfo != null)
+                        if (Directory.Exists(currentSearchIndexInfo.IndexFilesLocation))
+                            Directory.Delete(currentSearchIndexInfo.IndexFilesLocation, true);
                 }
                 catch (Exception e)
                 {
-                    indexStatus = IndexStatus.Failed;
-                    indexError = e.Message;
+                    searchIndexInfoProvider.SaveCurrentSearchIndexInfo(new SearchIndexInfo
+                    {
+                        Date = DateTime.Now,
+                        IndexSuccess = false,
+                        IndexFinished = true,
+                        IndexErrorMessage = e.Message,
+                        IndexErrorStackTrace = e.StackTrace
+                    });
+
+                    if (Directory.Exists(indexDirectory.FullName))
+                        Directory.Delete(indexDirectory.FullName, true);
+
+                    throw;
+                }
+                finally
+                {
+                    searchIndexInfoProvider.ExitLock();
                 }
             });
         }

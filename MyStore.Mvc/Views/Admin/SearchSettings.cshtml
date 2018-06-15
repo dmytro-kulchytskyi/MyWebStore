@@ -9,22 +9,32 @@
 <h2>Search settings</h2>
 
 <div>
-    <dl class="dl-horizontal">
-        <dt>@Html.DisplayNameFor(m => m.IndexStatus)</dt>
-        <dd>@Model.IndexStatus.ToString()</dd>
-        @if (Model.IndexStatus == IndexStatus.InProgress)
-        {
-            <dt>@Html.DisplayNameFor(m => m.IndexProgress)</dt>
-            <dd>@((Model.IndexProgress * 100).ToString("F3"))%</dd>
-        }
-        else if (Model.IndexStatus == IndexStatus.Failed)
-        {
-            <dt>@Html.DisplayNameFor(m => m.ErrorMessage)</dt>
-            <dd>@Model.ErrorMessage</dd>
-        }
-    </dl>
+    @if (Model.IndexExists)
+    {
+        <dl class="dl-horizontal">
+            @if (Model.IndexInProgress)
+            {
+                <dt>@Html.DisplayNameFor(m => m.IndexInProgress)</dt>
+                <dd>@Model.IndexProgressPercentage.ToString("P")</dd>
+            }
+            else if (!Model.IndexSuccess)
+            {
+                <dt>@Html.DisplayNameFor(m => m.IndexErrorMessage)</dt>
+                <dd>@Model.IndexErrorMessage</dd>
+
+                <dt>@Html.DisplayNameFor(m => m.IndexErrorStackTrace)</dt>
+                <dd>@Model.IndexErrorStackTrace</dd>
+            }
+        </dl>
+    }
+    else
+    {
+        <h4>
+            Index does not exist!
+        </h4>
+    }
     <div>
-        @if (Model.IndexStatus != IndexStatus.InProgress)
+        @if (!Model.IndexInProgress)
         {
             using (Html.BeginForm("CreateSearchIndex", "Admin", FormMethod.Post))
             {
