@@ -16,8 +16,6 @@ namespace MyStore.Mvc.Models.EntityMapperProfiles
     {
         public ProductProfile()
         {
-            CreateMap<ProductOrderType, ProductOrderTypeViewModel>();
-
             CreateMap<Product, ProductDetailsViewModel>();
 
             CreateMap<Product, ProductListItemViewModel>()

@@ -29,31 +29,32 @@ namespace MyStore.Mvc.Controllers
             this.productSearchManager = productSearchManager;
         }
 
-        private void InitializeProductsListViewModel(ProductsListViewModel model, int totalCount, IEnumerable<string> availableSortFields, IList<ProductListItemViewModel> products)
-        {
-            model.TotalItemsCount = totalCount;
-            model.AvailableSortFields = availableSortFields.ToArray();
-            model.Items = products;
-        }
 
         [HttpGet]
         public ActionResult List(ProductsListViewModel model)
         {
-            var availableSortFields = AppConfiguration.ProductsListAvailableOrderTypes.ToList();
+            var sortField = model.SortField;
+            var inverseSort = model.InverseSort;
+            if (string.IsNullOrEmpty(sortField))
+            {
+                sortField = AppConfiguration.DefaultSortField;
+                inverseSort = AppConfiguration.InverseDefaultSortField;
+            }
 
-            if (string.IsNullOrEmpty(model.SortField))
-                model.SortField = availableSortFields.First();
-
+            if (!ProductFields.All.Contains(sortField))
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            
             var results = productManager.GetPageSortedBy(
-                model.SortField,
-                model.InverseSort,
+                sortField,
+                inverseSort,
                 model.PageSize,
                 model.PageNumber);
 
-            var products = Mapper.Map<IList<ProductListItemViewModel>>(results.Items);
+            if (model.SortField == AppConfiguration.DefaultSortField)
+                model.SortField = string.Empty;
 
-            InitializeProductsListViewModel(model, results.TotalCount, availableSortFields, products);
-
+            model.TotalItemsCount = results.TotalCount;
+            model.Items = Mapper.Map<IList<ProductListItemViewModel>>(results.Items);
             return View(model);
         }
 
@@ -70,13 +71,10 @@ namespace MyStore.Mvc.Controllers
                 SortField = model.SortField
             });
 
-            var products = Mapper.Map<IList<ProductListItemViewModel>>(searchResults.Items);
+            model.RelevantSortTypeAvailable = true;
 
-            var availableSortFields = AppConfiguration.ProductsListAvailableOrderTypes.ToList();
-            availableSortFields.Add("");
-
-            InitializeProductsListViewModel(model, searchResults.TotalCount, availableSortFields, products);
-
+            model.Items = Mapper.Map<IList<ProductListItemViewModel>>(searchResults.Items);
+            model.TotalItemsCount = searchResults.TotalCount;
             return View("List", model);
         }
 

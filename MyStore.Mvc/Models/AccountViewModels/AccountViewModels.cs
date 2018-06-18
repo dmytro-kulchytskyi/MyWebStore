@@ -100,8 +100,7 @@ namespace MyStore.Models
         [Required]
         [Display(Name = "PostalCode")]
         public virtual string PostalCode { get; set; }
-
-        [ScaffoldColumn(false)]
+        
         public IList<CountryViewModel> AvailableCountries { get; set; }
     }
 

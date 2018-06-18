@@ -10,17 +10,17 @@
    })">@Html.PreviewText(Model.Title, 12)</a>
 
 </h3>
-<img alt="Image" src="~/Content/Images/@Model.Image" style="max-width:150px; max-height: 160px;" />
+<img alt="Image" src="~/Content/Images/Products/@Model.Image" style="max-width:150px; max-height: 160px;" />
 <div style="display: flex; justify-content: center; align-items: center; flex-direction: column">
     <p>@Html.DisplayNameFor(m => m.Price): @Html.PriceFormat(Model.Price)</p>
 
     @if (User.Identity.IsAuthenticated)
     {
         @Html.Partial("_AddToBasketButton", new MyStore.Mvc.Models.BasketViewModels.AddToBasketButtonViewModel
-            {
-                IsInStock = Model.SellsCount > 0,
-                ProductId = Model.Id,
-            })
+        {
+            IsInStock = Model.Stock > 0,
+            ProductId = Model.Id,
+        })
     }
 </div>
 </div>

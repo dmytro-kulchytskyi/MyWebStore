@@ -12,7 +12,8 @@
             @Html.ActionLink("«", ViewContext.RouteData.Values["action"].ToString(), new
             {
                 pageNumber = 1,
-                orderField = Model.OrderType != Model.AvailableOrderTypes.First() ? Model.OrderType : "",
+                sortField = Model.SortField,
+                inverseSort = Model.InverseSort ? true.ToString() : "",
                 query = Model.Query
             }, null)
         </li>
@@ -26,7 +27,8 @@
                 @Html.ActionLink((i + 1).ToString(), ViewContext.RouteData.Values["action"].ToString(), new
                 {
                     pageNumber = i + 1,
-                    orderType = Model.OrderType != Model.AvailableOrderTypes.First() ? Model.OrderType : "",
+                    sortField = Model.SortField,
+                    inverseSort = Model.InverseSort ? true.ToString() : "",
                     query = Model.Query
                 }, new { @class = Model.PageNumber == i ? "active" : "" })
             </li>
@@ -39,7 +41,8 @@
             @Html.ActionLink("»", ViewContext.RouteData.Values["action"].ToString(), new
             {
                 pageNumber = Model.PageCount,
-                orderField = Model.OrderType != Model.AvailableOrderTypes.First() ? Model.OrderType : "",
+                sortField = Model.SortField,
+                inverseSort = Model.InverseSort,
                 query = Model.Query
             }, null)
         </li>

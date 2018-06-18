@@ -15,8 +15,7 @@ namespace MyStore.Mvc.Models
         public BasketViewModelsMapperProfile()
         {
             CreateMap<Product, BasketProductViewModel>()
-                .ForMember(p => p.Url, m => m.MapFrom(s => UrlHelper.GetUrlSafeLine(s.Title)))
-                .ForMember(p => p.InStock, m => m.MapFrom(s => s.Stock > 0));
+                .ForMember(p => p.Url, m => m.MapFrom(s => UrlHelper.GetUrlSafeLine(s.Title)));
 
         }
     }

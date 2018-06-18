@@ -1,0 +1,33 @@
+﻿@model MyStore.Mvc.Models.ProductViewModels.ProductsListViewModel
+
+@using MyStore.Business;
+
+@{
+    var sortFieldHtmlName = ViewData.TemplateInfo.GetFullHtmlFieldName(nameof(Model.SortField));
+}
+<div class=".productsSortBar">
+    <select name="@sortFieldHtmlName" id="sortFieldSelect" class="productsSortBarInput">
+        @if (Model.RelevantSortTypeAvailable)
+        {
+            @Option("Relevant", "")
+        }
+        @Option("Newest", ProductFields.Added, true)
+        @Option("Lowest price", ProductFields.Price)
+        @Option("Highest price", ProductFields.Price, true)
+        @Option("Popular", ProductFields.SellsCount, true)
+        @Option("Lowest stock level", ProductFields.Stock)
+        @Option("Title A-Z", ProductFields.Title)
+        @Option("Title Z-A", ProductFields.Title, true)
+    </select>
+
+    @Html.HiddenFor(m => m.InverseSort, new { id = "inverseSortType" })
+</div>
+
+
+@helper Option(string text, string fieldName, bool inverseSort = false)
+    {
+        <option value="@fieldName" inverse="@inverseSort.ToString()"
+                @if (Model.SortField == fieldName && Model.InverseSort == inverseSort) { <text> selected="selected" </text> }>
+            @text
+        </option>
+}

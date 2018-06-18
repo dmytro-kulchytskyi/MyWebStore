@@ -5,13 +5,21 @@
     @using (Html.BeginForm(ViewContext.RouteData.Values["action"].ToString(), "Product", new { pageNumber = 1 }, FormMethod.Post, new { @class = "productsSortBar", role = "form", id = "productListSortBar" }))
     {
         @Html.HiddenFor(m => m.Query)
-        <div>
-            @Html.DropDownListFor(m => m.OrderType, Model.AvailableOrderTypes.Select(f => new SelectListItem
+        @*<div>
+            @Html.DropDownListFor(m => m.SortField, Model.AvailableSortFields.Select(f => new SelectListItem
             {
                 Value = f,
-                Text = f
+                Text = string.IsNullOrEmpty(f) ? "Relevant" : f
             }), new { @class = "productsSortBarInput" })
+
+            @Html.HiddenFor(m => m.InverseSort, new { id = "inverseSortType" })
         </div>
-        <input type="submit" value="Sort" class="btn btn-sm btn-success">
+
+
+        <div id="ascSortButton" class="arrow up @(Model.InverseSort ? "" : "active")"></div>
+        <div id="descSortButton" class="arrow down @(Model.InverseSort ? "active" : "")"></div>*@
+
+        @Html.Partial("_ProductSortBarSortTypeSelect")
+
     }
 </div>

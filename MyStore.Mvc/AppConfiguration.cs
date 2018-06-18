@@ -14,13 +14,10 @@ namespace MyStore.Mvc
         
         public static int ProductListPageSize => int.Parse(ConfigurationManager.AppSettings["Mvc.ProductList.ProductsOnPage"]);
 
- 
-        public static string[] ProductsListAvailableOrderTypes => ConfigurationManager.AppSettings["Mvc.ProductList.SortFields"]
-            .Split(',')
-            .Select(x => x.Trim())
-            .ToArray();
+        public static string DefaultSortField => ConfigurationManager.AppSettings["Mvc.ProductList.DefaultSort.Field"];
 
-    
+        public static bool InverseDefaultSortField => bool.Parse(ConfigurationManager.AppSettings["Mvc.ProductList.DefaultSort.InverseDefaultField"]);
+
         public static int SearchDropdownItemsLimit => int.Parse(ConfigurationManager.AppSettings["Mvc.SearchDropdown.MaxResults"]);
     }
 }

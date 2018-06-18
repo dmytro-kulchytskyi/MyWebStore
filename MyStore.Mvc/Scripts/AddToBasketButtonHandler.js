@@ -1,8 +1,6 @@
 ﻿(function ($) {
     $(function () {
-
-        console.log("123131");
-
+        
         $('.addToBasketForm').submit(function (e) {
             e.preventDefault();
 
